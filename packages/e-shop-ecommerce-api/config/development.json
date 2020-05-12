@@ -1,0 +1,12 @@
+{
+    "name": "E-Shop E-commerce API (Development)",
+    "app": {
+        "version": "v1",
+        "port": "3000"
+    },
+    "database": {
+        "port": "27017",
+        "host": "localhost",
+        "name": "e-shop-e-commerce-api-development"
+    }
+}
