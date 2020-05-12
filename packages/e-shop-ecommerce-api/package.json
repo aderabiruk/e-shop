@@ -1,0 +1,60 @@
+{
+  "name": "e-shop-ecommerce-api",
+  "version": "1.0.0",
+  "description": "Project E-Shop Ecommerece API",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "nodemon --watch src --exec ts-node src/index.ts",
+    "start": "tsc && node dist/index.js",
+    "test": "jest --verbose --runInBand",
+    "test:dev": "jest --watchAll --verbose --runInBand",
+    "test:coverage": "jest --coverage"
+  },
+  "keywords": [
+    "E-Shop",
+    "Ecommerce",
+    "API"
+  ],
+  "author": "Biruk Adera",
+  "license": "ISC",
+  "dependencies": {
+    "async": "^3.2.0",
+    "body-parser": "^1.19.0",
+    "compression": "^1.7.4",
+    "config": "^3.3.1",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "helmet": "^3.22.0",
+    "lodash": "^4.17.15",
+    "moment": "^2.25.3",
+    "mongoose": "^5.9.13",
+    "mongoose-validation-error-handler": "^2.1.4",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.2",
+    "typescript": "^3.8.3",
+    "voca": "^1.4.0",
+    "winston": "^3.2.1"
+  },
+  "devDependencies": {
+    "@types/async": "^3.2.1",
+    "@types/body-parser": "^1.19.0",
+    "@types/compression": "^1.7.0",
+    "@types/config": "0.0.36",
+    "@types/cors": "^2.8.6",
+    "@types/express": "^4.17.6",
+    "@types/helmet": "0.0.46",
+    "@types/jest": "^25.2.1",
+    "@types/mongoose": "^5.7.16",
+    "@types/morgan": "^1.9.0",
+    "@types/node": "^13.13.5",
+    "@types/voca": "^1.4.0",
+    "@types/winston": "^2.4.4",
+    "jest": "^26.0.1",
+    "nodemon": "^2.0.3",
+    "ts-jest": "^25.5.1",
+    "ts-node": "^8.10.1",
+    "tslint": "^6.1.2"
+  }
+}
