@@ -181,7 +181,7 @@ describe("Store.dal", () => {
     });
 
     afterEach(async () => {
-        await Store.deleteMany({ name: "test-store "});
+        await Store.deleteMany({ name: "test-store"});
     });
 
 });
