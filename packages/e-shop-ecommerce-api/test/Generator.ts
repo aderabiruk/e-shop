@@ -4,6 +4,7 @@ import Store from "../src/models/Store";
 import Country from '../src/models/Country';
 import Product from "../src/models/Product";
 import Category from "../src/models/Category";
+import Customer from "../src/models/Customer";
 import PaymentMethod from "../src/models/PaymentMethod";
 import ShipmentMethod from "../src/models/ShipmentMethod";
 
@@ -37,6 +38,18 @@ export const createCountry = (name: string, code: string, flag: string, currency
     country.currency_name = currency_name;
     country.currency_code = currency_code;
     return country;
+};
+
+export const createCustomer = (first_name: string, last_name: string, email: string, phone_number: string, gender: string, store_id: string, birth_day: Date) => {
+    let customer = new Customer();
+    customer.first_name = first_name;
+    customer.last_name = last_name;
+    customer.email = email;
+    customer.phone_number = phone_number;
+    customer.gender = gender;
+    customer.store_id = store_id;
+    customer.birth_day = birth_day;
+    return customer;
 };
 
 export const createPaymentMethod = (name: string) => {
