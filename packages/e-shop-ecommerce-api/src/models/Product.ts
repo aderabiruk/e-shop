@@ -56,7 +56,7 @@ let ProductSchema = new Schema({
     },
     tags: [{
         type: Schema.Types.ObjectId,
-        ref: 'Category',
+        ref: 'Tag',
         required: true,
     }],
     weight: {
