@@ -1,6 +1,6 @@
 import { model, Schema, Document } from 'mongoose';
 
-export interface PaymentMethod extends Document {
+export interface IPaymentMethod extends Document {
     name: string;
     created_at: Date;
     updated_at: Date;
@@ -30,4 +30,4 @@ let PaymentMethodSchema = new Schema({
 	}
 }, {collection: 'payment_methods'});
 
-export default model<PaymentMethod>('PaymentMethod', PaymentMethodSchema);
+export default model<IPaymentMethod>('PaymentMethod', PaymentMethodSchema);

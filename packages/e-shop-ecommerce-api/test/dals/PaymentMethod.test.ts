@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 import PaymentMethodDAL from '../../src/dals/PaymentMethod.dal';
-import PaymentMethod, { PaymentMethod as IPaymentMethod } from '../../src/models/PaymentMethod';
+import PaymentMethod, { IPaymentMethod } from '../../src/models/PaymentMethod';
 
 import { createPaymentMethod } from '../Generator';
 

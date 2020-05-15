@@ -1,6 +1,6 @@
 import transform_mongoose_error from 'mongoose-validation-error-handler';
 
-import PaymentMethod, { PaymentMethod as IPaymentMethod } from '../models/PaymentMethod';
+import PaymentMethod, { IPaymentMethod } from '../models/PaymentMethod';
 
 class PaymentMethodDAL {
 
