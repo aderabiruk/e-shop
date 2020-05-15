@@ -1,6 +1,6 @@
 import transform_mongoose_error from 'mongoose-validation-error-handler';
 
-import Discount, { Discount as IDiscount } from '../models/Discount';
+import Discount, { IDiscount } from '../models/Discount';
 
 class DiscountDAL {
 
@@ -9,13 +9,13 @@ class DiscountDAL {
      * 
      * @param {string}  name
      * @param {string}  code
-     * @param {string}  percentage
+     * @param {number}  percentage
      * @param {Date}    start_date
      * @param {Date}    end_date
      * 
      * @returns {Promise<IDiscount>}
      */
-    static create(name: string, code: string, percentage: string, start_date: Date, end_date: Date): Promise<IDiscount> {
+    static create(name: string, code: string, percentage: number, start_date: Date, end_date: Date): Promise<IDiscount> {
         return new Promise((resolve, reject) => {
             let discount = new Discount();
             discount.name = name;
@@ -23,12 +23,12 @@ class DiscountDAL {
             discount.percentage = percentage;
             discount.start_date = start_date;
             discount.end_date = end_date;
-            discount.save((error, savedPayment) => {
+            discount.save((error, savedDiscount) => {
                 if (error) {
                     reject(transform_mongoose_error(error, { capitalize: true, humanize: true }))
                 }
                 else {
-                    resolve(savedPayment);
+                    resolve(savedDiscount);
                 }
             });
         });

@@ -1,11 +1,11 @@
 import { model, Schema, Document } from 'mongoose';
-import { LocationType, PointSchema } from './Location';
+import { ILocation, PointSchema } from './Location';
 
 export interface ICity extends Document {
     name: string;
     code: string;
     country_id: string;
-    location: LocationType;
+    location: ILocation;
     created_at: Date;
     updated_at: Date;
     deleted_at: Date;

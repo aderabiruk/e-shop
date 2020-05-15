@@ -139,12 +139,12 @@ class CountryDAL {
         return new Promise((resolve, reject) => {
             if (country) {
                 country.deleted_at = new Date();
-                country.save((error, updatedCountry) => {
+                country.save((error, deletedCountry) => {
                     if (error) {
                         reject(transform_mongoose_error(error, { capitalize: true, humanize: true }))
                     }
                     else {
-                        resolve(updatedCountry);
+                        resolve(deletedCountry);
                     }
                 });
             }
