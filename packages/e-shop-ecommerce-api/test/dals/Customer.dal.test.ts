@@ -55,6 +55,20 @@ describe("Customer.dal", () => {
             }
         });
 
+        it("Should return error if invalid gender provided!", async () => {
+            try {
+                await CustomerDAL.create("test-first-name", "test-last-name", "test-email", "test-phone-number", "INVALID", mongoose.Types.ObjectId().toHexString(), moment().toDate());
+                fail();
+            }
+            catch (error) {
+                expect(error).toEqual(expect.arrayContaining([
+                    expect.objectContaining({
+                        field: "gender",
+                    })
+                ]));
+            }
+        });
+
         it("Should create customer if no errors", async () => {
             let birth_day = moment().toDate();
             let store_id = mongoose.Types.ObjectId().toHexString();
