@@ -1,6 +1,6 @@
 import transform_mongoose_error from 'mongoose-validation-error-handler';
 
-import Store, { Store as IStore } from '../models/Store';
+import Store, { IStore } from '../models/Store';
 
 class StoreDAL {
 

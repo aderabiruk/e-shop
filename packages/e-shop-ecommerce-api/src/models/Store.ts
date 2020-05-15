@@ -1,13 +1,13 @@
 import { model, Schema, Document } from 'mongoose';
-import { LocationType, PointSchema } from './Location';
+import { ILocation, PointSchema } from './Location';
 
-export interface Store extends Document {
+export interface IStore extends Document {
     name: string;
     email: string;
     phone_number: string;
     city_id: string;
     address: string;
-    location: LocationType;
+    location: ILocation;
     created_at: Date;
     updated_at: Date;
     deleted_at: Date;
@@ -53,4 +53,4 @@ let StoreSchema = new Schema({
 	}
 }, {collection: 'stories'});
 
-export default model<Store>('Store', StoreSchema);
+export default model<IStore>('Store', StoreSchema);

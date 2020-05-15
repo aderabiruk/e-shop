@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 import StoreDAL from '../../src/dals/Store.dal';
-import Store, { Store as IStore } from '../../src/models/Store';
+import Store, { IStore } from '../../src/models/Store';
 import { createStore } from '../Generator';
 
 const app = require("../../src/app");
