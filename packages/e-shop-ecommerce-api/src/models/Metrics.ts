@@ -1,6 +1,6 @@
 import { Schema } from 'mongoose';
 
-export interface ProductDimensionType {
+export interface IProductDimension {
     width: number;
     length: number;
     height: number;

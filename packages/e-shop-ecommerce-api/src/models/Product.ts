@@ -1,9 +1,9 @@
 import { model, Schema, Document } from 'mongoose';
 
-import { Tag } from './Tag';
-import { ProductDimensionType, ProductDimensionSchema } from './Metrics';
+import { ITag } from './Tag';
+import { IProductDimension, ProductDimensionSchema } from './Metrics';
 
-export interface Product extends Document {
+export interface IProduct extends Document {
     name: string;
     slug: string;
     price: number;
@@ -12,9 +12,9 @@ export interface Product extends Document {
     image_urls: string[];
     category_id: string;
     store_id: string;
-    tags: Tag[] | string[];
+    tags: ITag[] | string[];
     weight: number;
-    dimension: ProductDimensionType;
+    dimension: IProductDimension;
     is_visible: boolean;
     is_out_of_stock: boolean;
     created_at: Date;
@@ -89,4 +89,4 @@ let ProductSchema = new Schema({
 	}
 }, {collection: 'products'});
 
-export default model<Product>('Product', ProductSchema);
+export default model<IProduct>('Product', ProductSchema);

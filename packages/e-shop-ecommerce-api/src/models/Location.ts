@@ -8,7 +8,7 @@ export interface IAddress {
     address: string;
 };
 
-export interface LocationType {
+export interface ILocation {
     type: string;
     coordinates: any[];
 };
