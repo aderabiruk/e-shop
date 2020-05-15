@@ -7,11 +7,13 @@ import Payment from "../src/models/Payment";
 import Shipment from "../src/models/Shipment";
 import Category from "../src/models/Category";
 import Customer from "../src/models/Customer";
+import Discount from "../src/models/Discount";
 import { IAddress } from "../src/models/Location";
 import { IOrderPrice } from "../src/models/Price";
 import Order, { IOrderItem } from "../src/models/Order";
 import PaymentMethod from "../src/models/PaymentMethod";
 import ShipmentMethod from "../src/models/ShipmentMethod";
+
 
 export const createCategory = (name: string, slug: string, parent: string, image_url: string, description: string) => {
     let category = new Category();
@@ -56,6 +58,16 @@ export const createCustomer = (first_name: string, last_name: string, email: str
     customer.birth_day = birth_day;
     return customer;
 };
+
+export const createDiscount = (name: string, code: string, percentage: number, start_date: Date, end_date: Date) => {
+    let discount = new Discount();
+    discount.name = name;
+    discount.code = code;
+    discount.percentage = percentage;
+    discount.start_date = start_date;
+    discount.end_date = end_date;
+    return discount;
+}
 
 export const createOrder = (number: string, customer_id: string, billing_address: IAddress, shipping_address: IAddress, status: string, payment_method_id: string, shipping_method_id: string, items: IOrderItem[], price: IOrderPrice, note: string) => {
     let order = new Order();
