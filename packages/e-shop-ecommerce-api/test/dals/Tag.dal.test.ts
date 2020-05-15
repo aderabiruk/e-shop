@@ -10,7 +10,7 @@ const app = require("../../src/app");
 describe("Tag.dal", () => {
         
     describe("create", () => {
-        it("Should return error if required fields are not provieded!", async () => {
+        it("Should return error if required fields are not provided!", async () => {
             try {
                 await TagDAL.create(null, null, null);
                 fail();

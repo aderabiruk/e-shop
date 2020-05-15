@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 import ProductDAL from '../../src/dals/Product.dal';
-import Product, { Product as IProduct } from '../../src/models/Product';
+import Product, { IProduct } from '../../src/models/Product';
 import { createProduct } from '../Generator';
 
 const app = require("../../src/app");
@@ -9,7 +9,7 @@ const app = require("../../src/app");
 describe("Product DAL", () => {
     
     describe("create", () => {
-        it("Should return error if required fields are not provieded!", async () => {
+        it("Should return error if required fields are not provided!", async () => {
             try {
                 await ProductDAL.create(null, null, null, null ,null, null, null, null, null, null, null, null, null, null, null);
                 fail();

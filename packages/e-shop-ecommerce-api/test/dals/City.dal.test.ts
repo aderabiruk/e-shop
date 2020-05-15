@@ -12,7 +12,7 @@ const LONGITUDE = 99;
 describe("Store.dal", () => {
         
     describe("create", () => {
-        it("Should return error if required fields are not provieded!", async () => {
+        it("Should return error if required fields are not provided!", async () => {
             try {
                 await CityDAL.create(null, null, null, null ,null);
                 fail();
