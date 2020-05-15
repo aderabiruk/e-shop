@@ -180,8 +180,8 @@ describe("Customer.dal", () => {
         await Customer.deleteMany({ email: "test-email", phone_number: "test-phone-number" });
     });
 
-    afterAll(() => {
-        mongoose.connection.close();
+    afterAll(async () => {
+        await mongoose.connection.close();
     });
 
 });

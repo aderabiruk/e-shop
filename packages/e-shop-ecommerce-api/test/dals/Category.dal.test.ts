@@ -125,8 +125,8 @@ describe("Category.dal", () => {
         await Category.deleteMany({ name: "test-category "});
     });
 
-    afterAll(() => {
-        mongoose.connection.close();
+    afterAll(async () => {
+        await mongoose.connection.close();
     });
 
 });

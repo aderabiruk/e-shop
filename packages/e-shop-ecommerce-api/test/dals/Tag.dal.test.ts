@@ -121,8 +121,8 @@ describe("Tag.dal", () => {
         await Tag.deleteMany({ name: "test-tag" });
     });
 
-    afterAll(() => {
-        mongoose.connection.close();
+    afterAll(async () => {
+        await mongoose.connection.close();
     });
 
 });

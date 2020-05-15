@@ -175,8 +175,8 @@ describe("Store.dal", () => {
         await City.deleteMany({ name: "test-city"});
     });
 
-    afterAll(() => {
-        mongoose.connection.close();
+    afterAll(async () => {
+        await mongoose.connection.close();
     });
 
 });

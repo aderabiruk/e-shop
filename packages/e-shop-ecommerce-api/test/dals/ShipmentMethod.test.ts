@@ -146,8 +146,8 @@ describe("ShipmentMethod.dal", () => {
         await ShipmentMethod.deleteMany({ name: "test-shipment-method-1" });
     });
 
-    afterAll(() => {
-        mongoose.connection.close();
+    afterAll(async () => {
+        await mongoose.connection.close();
     });
 
 });

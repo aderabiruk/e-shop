@@ -146,8 +146,8 @@ describe("PaymentMethod.dal", () => {
         await PaymentMethod.deleteMany({ name: "test-payment-method-1" });
     });
 
-    afterAll(() => {
-        mongoose.connection.close();
+    afterAll(async () => {
+        await mongoose.connection.close();
     });
 
 });

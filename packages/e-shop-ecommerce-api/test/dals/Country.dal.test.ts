@@ -147,8 +147,8 @@ describe("Country.dal", () => {
         await Country.deleteMany({ name: "test-country" });
     });
 
-    afterAll(() => {
-        mongoose.connection.close();
+    afterAll(async () => {
+        await mongoose.connection.close();
     });
 
 });
