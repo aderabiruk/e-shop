@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
 
+import { createProduct } from '../Generator';
 import ProductDAL from '../../src/dals/Product.dal';
 import Product, { IProduct } from '../../src/models/Product';
-import { createProduct } from '../Generator';
 
 const app = require("../../src/app");
 

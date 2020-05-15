@@ -1,6 +1,6 @@
 import transform_mongoose_error from 'mongoose-validation-error-handler';
 
-import Product, { Product as IProduct } from '../models/Product';
+import Product, { IProduct } from '../models/Product';
 
 class ProductDAL {
 

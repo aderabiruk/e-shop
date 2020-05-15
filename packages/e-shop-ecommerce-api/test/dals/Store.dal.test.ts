@@ -184,4 +184,8 @@ describe("Store.dal", () => {
         await Store.deleteMany({ name: "test-store"});
     });
 
+    afterAll(() => {
+        mongoose.connection.close();
+    });
+
 });
