@@ -15,12 +15,12 @@ class PaymentMethodDAL {
         return new Promise((resolve, reject) => {
             let paymentMethod = new PaymentMethod();
             paymentMethod.name = name;
-            paymentMethod.save((error, savedPayment) => {
+            paymentMethod.save((error, savedPaymentMethod) => {
                 if (error) {
                     reject(transform_mongoose_error(error, { capitalize: true, humanize: true }))
                 }
                 else {
-                    resolve(savedPayment);
+                    resolve(savedPaymentMethod);
                 }
             });
         });
