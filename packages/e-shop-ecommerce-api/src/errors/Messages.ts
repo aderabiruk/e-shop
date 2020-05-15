@@ -18,6 +18,11 @@ const Messages = {
     COUNTRY_NOT_FOUND: "Country Not Found!",
 
     /**
+     * Discout Error Messages
+     */
+    DISCOUNT_INVALID_PERCENTAGE: "Invalid percentage provided!",
+
+    /**
      * Order Error Messages
      */
     ORDER_ITEMS_REQUIRED: "Items are required!",
