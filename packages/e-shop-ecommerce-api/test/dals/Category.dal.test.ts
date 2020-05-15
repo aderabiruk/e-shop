@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
 
-import CategoryDAL from '../../src/dals/Category.dal';
-import Category, { Category as ICategory } from '../../src/models/Category';
 import { createCategory } from '../Generator';
+import CategoryDAL from '../../src/dals/Category.dal';
+import Category, { ICategory } from '../../src/models/Category';
 
 const app = require("../../src/app");
 

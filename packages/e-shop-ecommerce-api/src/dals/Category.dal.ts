@@ -1,6 +1,6 @@
 import transform_mongoose_error from 'mongoose-validation-error-handler';
 
-import Category, { Category as ICategory } from '../models/Category';
+import Category, { ICategory } from '../models/Category';
 
 class CategoryDAL {
     
