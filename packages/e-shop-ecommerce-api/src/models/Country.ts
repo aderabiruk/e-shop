@@ -1,6 +1,6 @@
 import { model, Schema, Document } from 'mongoose';
 
-export interface Country extends Document {
+export interface ICountry extends Document {
     name: string;
     code: string;
     flag: string;
@@ -46,4 +46,4 @@ let CountrySchema = new Schema({
 	}
 }, {collection: 'countries'});
 
-export default model<Country>('Country', CountrySchema);
+export default model<ICountry>('Country', CountrySchema);

@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 import CountryDAL from '../../src/dals/Country.dal';
-import Country, { Country as ICountry } from '../../src/models/Country';
+import Country, { ICountry } from '../../src/models/Country';
 
 import { createCountry } from '../Generator';
 

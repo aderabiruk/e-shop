@@ -1,6 +1,6 @@
 import transform_mongoose_error from 'mongoose-validation-error-handler';
 
-import Country, { Country as ICountry } from '../models/Country';
+import Country, { ICountry } from '../models/Country';
 
 class CountryDAL {
     
