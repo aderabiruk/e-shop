@@ -1,6 +1,6 @@
 import { model, Schema, Document } from 'mongoose';
 
-export interface ShipmentMethod extends Document {
+export interface IShipmentMethod extends Document {
     name: string;
     created_at: Date;
     updated_at: Date;
@@ -30,4 +30,4 @@ let ShipmentMethodSchema = new Schema({
 	}
 }, {collection: 'shipment_methods'});
 
-export default model<ShipmentMethod>('ShipmentMethod', ShipmentMethodSchema);
+export default model<IShipmentMethod>('ShipmentMethod', ShipmentMethodSchema);

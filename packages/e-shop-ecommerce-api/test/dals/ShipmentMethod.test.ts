@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 import ShipmentMethodDAL from '../../src/dals/ShipmentMethod.dal';
-import ShipmentMethod, { ShipmentMethod as IShipmentMethod } from '../../src/models/ShipmentMethod';
+import ShipmentMethod, { IShipmentMethod } from '../../src/models/ShipmentMethod';
 
 import { createShipmentMethod } from '../Generator';
 

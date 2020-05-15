@@ -1,6 +1,6 @@
 import transform_mongoose_error from 'mongoose-validation-error-handler';
 
-import ShipmentMethod, { ShipmentMethod as IShipmentMethod } from '../models/ShipmentMethod';
+import ShipmentMethod, { IShipmentMethod } from '../models/ShipmentMethod';
 
 class ShipmentMethodDAL {
 
