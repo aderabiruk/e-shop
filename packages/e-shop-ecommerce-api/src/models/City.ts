@@ -1,7 +1,7 @@
 import { model, Schema, Document } from 'mongoose';
 import { LocationType, PointSchema } from './Location';
 
-export interface City extends Document {
+export interface ICity extends Document {
     name: string;
     code: string;
     country_id: string;
@@ -43,4 +43,4 @@ let CitySchema = new Schema({
 	}
 }, {collection: 'cities'});
 
-export default model<City>('City', CitySchema);
+export default model<ICity>('City', CitySchema);

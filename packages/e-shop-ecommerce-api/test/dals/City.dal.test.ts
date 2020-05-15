@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 import CityDAL from '../../src/dals/City.dal';
-import City, { City as ICity } from '../../src/models/City';
+import City, { ICity } from '../../src/models/City';
 import { createCity } from '../Generator';
 
 const app = require("../../src/app");

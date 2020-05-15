@@ -1,6 +1,6 @@
 import transform_mongoose_error from 'mongoose-validation-error-handler';
 
-import City, { City as ICity } from '../models/City';
+import City, { ICity } from '../models/City';
 
 class CityDAL {
 
