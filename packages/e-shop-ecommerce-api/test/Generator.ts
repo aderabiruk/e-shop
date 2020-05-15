@@ -3,8 +3,13 @@ import City from "../src/models/City";
 import Store from "../src/models/Store";
 import Country from '../src/models/Country';
 import Product from "../src/models/Product";
+import Payment from "../src/models/Payment";
+import Shipment from "../src/models/Shipment";
 import Category from "../src/models/Category";
 import Customer from "../src/models/Customer";
+import { IAddress } from "../src/models/Location";
+import { IOrderPrice } from "../src/models/Price";
+import Order, { IOrderItem } from "../src/models/Order";
 import PaymentMethod from "../src/models/PaymentMethod";
 import ShipmentMethod from "../src/models/ShipmentMethod";
 
@@ -52,10 +57,44 @@ export const createCustomer = (first_name: string, last_name: string, email: str
     return customer;
 };
 
+export const createOrder = (number: string, customer_id: string, billing_address: IAddress, shipping_address: IAddress, status: string, payment_method_id: string, shipping_method_id: string, items: IOrderItem[], price: IOrderPrice, note: string) => {
+    let order = new Order();
+    order.number = number;
+    order.customer_id = customer_id;
+    order.billing_address = billing_address;
+    order.shipping_address = shipping_address;
+    order.status = status;
+    order.payment_method_id = payment_method_id;
+    order.shipping_method_id = shipping_method_id;
+    order.items = items;
+    order.price = price;
+    order.note = note;
+    return order;
+};
+
+export const createPayment = (order: string, customer: string, method: string, status: string, price: number) => {
+    let payment = new Payment();
+    payment.order = order;
+    payment.customer = customer;
+    payment.method = method;
+    payment.status = status
+    payment.price = price;
+    return payment;
+};
+
 export const createPaymentMethod = (name: string) => {
     let paymentMethod = new PaymentMethod();
     paymentMethod.name = name;
     return paymentMethod;
+};
+
+export const createShipment = (order: string, method: string, status: string, tracking_code: string) => {
+    let shipment = new Shipment();
+    shipment.order = order;
+    shipment.method = method;
+    shipment.status = status
+    shipment.tracking_code = tracking_code;
+    return shipment;
 };
 
 export const createShipmentMethod = (name: string) => {
