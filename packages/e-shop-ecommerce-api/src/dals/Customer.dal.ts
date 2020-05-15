@@ -1,6 +1,6 @@
 import transform_mongoose_error from 'mongoose-validation-error-handler';
 
-import Customer, { Customer as ICustomer } from '../models/Customer';
+import Customer, { ICustomer } from '../models/Customer';
 
 class CustomerDAL {
 

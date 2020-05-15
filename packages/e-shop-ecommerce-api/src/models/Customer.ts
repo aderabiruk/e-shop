@@ -2,7 +2,7 @@ import { model, Schema, Document } from 'mongoose';
 
 import { Gender } from '../utilities/constants/General';
 
-export interface Customer extends Document {
+export interface ICustomer extends Document {
     first_name: string;
     last_name: string;
     email: string;
@@ -64,4 +64,4 @@ let CustomerSchema = new Schema({
 	}
 }, {collection: 'customers'});
 
-export default model<Customer>('Customer', CustomerSchema);
+export default model<ICustomer>('Customer', CustomerSchema);

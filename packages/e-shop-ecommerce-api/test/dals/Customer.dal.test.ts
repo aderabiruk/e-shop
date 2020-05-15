@@ -2,7 +2,7 @@ import moment from 'moment';
 import mongoose from 'mongoose';
 
 import CustomerDAL from '../../src/dals/Customer.dal';
-import Customer, { Customer as ICustomer } from '../../src/models/Customer';
+import Customer, { ICustomer } from '../../src/models/Customer';
 import { createCustomer } from '../Generator';
 import { Gender } from '../../src/utilities/constants/General';
 
