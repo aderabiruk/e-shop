@@ -18,6 +18,11 @@ const Messages = {
     COUNTRY_NOT_FOUND: "Country Not Found!",
 
     /**
+     * Order Error Messages
+     */
+    ORDER_ITEMS_REQUIRED: "Items are required!",
+
+    /**
      * Store Error Messages
      */
     STORE_NOT_FOUND: "Store Not Found!",
