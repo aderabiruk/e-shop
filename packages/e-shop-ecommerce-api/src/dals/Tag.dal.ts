@@ -1,6 +1,6 @@
 import transform_mongoose_error from 'mongoose-validation-error-handler';
 
-import Tag, { Tag as ITag } from '../models/Tag';
+import Tag, { ITag } from '../models/Tag';
 
 class TagDAL {
     

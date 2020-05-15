@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 import TagDAL from '../../src/dals/Tag.dal';
-import Tag, { Tag as ITag } from '../../src/models/Tag';
+import Tag, { ITag } from '../../src/models/Tag';
 
 import { createTag } from '../Generator';
 
