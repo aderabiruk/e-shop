@@ -19,7 +19,7 @@ class PaymentMethodService {
      * 
      * @returns {Promise<IPaymentMethod>}
      */
-    static create(name: string, description: string): Promise<IPaymentMethod> {
+    static create(name: string): Promise<IPaymentMethod> {
         return new Promise((resolve, reject) => {
             async.waterfall([
                 (done: Function) => {
