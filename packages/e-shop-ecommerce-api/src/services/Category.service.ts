@@ -41,7 +41,7 @@ class CategoryService {
                         CategoryDAL.findOne({ _id: parent})
                             .then((category: ICategory) => {
                                 if (!category) {
-                                    done(new NotFoundError(Messages.CATEGORY_NOT_FOUND));
+                                    done(new BadRequestError([ { field: "parent", message: Messages.CATEGORY_NOT_FOUND } ]));
                                 }
                                 else {
                                     done(null, category);
