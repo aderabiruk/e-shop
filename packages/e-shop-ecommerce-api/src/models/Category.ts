@@ -28,13 +28,11 @@ let CategorySchema = new Schema({
 		type: String
     },
     description: {
-		type: String,
-		required: true
+		type: String
     },
     parent: {
 		type: Schema.Types.ObjectId,
-        ref: 'Category',
-        required: true,
+        ref: 'Category'
     },
 	created_at: {
 		type: Date,
