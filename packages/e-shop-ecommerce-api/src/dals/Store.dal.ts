@@ -10,20 +10,20 @@ class StoreDAL {
      * @param {string} name
      * @param {string} email
      * @param {string} phone_number
-     * @param {string} city_id
+     * @param {string} city
      * @param {string} address
      * @param {number} latitude
      * @param {number} longitude
      * 
-     * @returns {Promise<Tag>}
+     * @returns {Promise<IStore>}
      */
-    static create(name: string, email: string, phone_number: string, city_id: string, address: string, latitude: number, longitude: number): Promise<IStore> {
+    static create(name: string, email: string, phone_number: string, city: string, address: string, latitude: number, longitude: number): Promise<IStore> {
         return new Promise((resolve, reject) => {
             let store = new Store();
             store.name = name;
             store.email = email;
             store.phone_number = phone_number;
-            store.city_id = city_id;
+            store.city = city;
             store.address = address;
             store.location = {
                 type: "Point",
@@ -97,7 +97,7 @@ class StoreDAL {
                 store.email = payload.email ? payload.email : store.email;
                 store.phone_number = payload.phone_number ? payload.phone_number : store.phone_number;
                 store.address = payload.address ? payload.address : store.address;
-                store.city_id = payload.city_id ? payload.city_id : store.city_id;
+                store.city = payload.city ? payload.city : store.city;
 
                 if (payload.latitude && payload.longitude) {
                     store.location = {
@@ -147,7 +147,7 @@ class StoreDAL {
      * 
      * @param {Store} store 
      * 
-     * @returns {Promise<any>}
+     * @returns {Promise<IStore>}
      */
     static deleteSoft(store: IStore): Promise<IStore> {
         return new Promise((resolve, reject) => {

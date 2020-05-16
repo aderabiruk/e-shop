@@ -5,7 +5,7 @@ export interface IStore extends Document {
     name: string;
     email: string;
     phone_number: string;
-    city_id: string;
+    city: string;
     address: string;
     location: ILocation;
     created_at: Date;
@@ -26,7 +26,7 @@ let StoreSchema = new Schema({
 		type: String,
 		required: true
     },
-    city_id: {
+    city: {
 		type: Schema.Types.ObjectId,
         ref: 'City',
         required: true,

@@ -137,12 +137,12 @@ export const createProduct = (name: string, slug: string, price: number, quantit
     return product;    
 }
 
-export const createStore = (name: string, email: string, phone_number: string, city_id: string, address: string, latitude: number, longitude: number) => {
+export const createStore = (name: string, email: string, phone_number: string, city: string, address: string, latitude: number, longitude: number) => {
     let store = new Store();
     store.name = name;
     store.email = email;
     store.phone_number = phone_number;
-    store.city_id = city_id;
+    store.city = city;
     store.address = address;
     store.location = {
         type: "Point",
