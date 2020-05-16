@@ -11,6 +11,7 @@ const Messages = {
      * Category Error Messages
      */
     CATEGORY_NOT_FOUND: "Category Not Found!",
+    CATEGORY_NAME_REQUIRED: "Category name is required!",
 
     /**
      * Country Error Messages
