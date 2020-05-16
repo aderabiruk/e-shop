@@ -33,9 +33,12 @@ describe("Category.service", () => {
                 fail();
             }
             catch (error) {
-                expect(error.statusCode).toBe(404);
+                expect(error.statusCode).toBe(400);
                 expect(error.payload.errors).toEqual(expect.arrayContaining([
-                    Messages.CATEGORY_NOT_FOUND
+                    expect.objectContaining({
+                        field: "parent",
+                        message: Messages.CATEGORY_NOT_FOUND
+                    })
                 ]));
             }
         });
