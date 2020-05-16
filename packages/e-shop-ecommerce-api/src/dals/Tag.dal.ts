@@ -11,7 +11,7 @@ class TagDAL {
      * @param {string} slug
      * @param {string} description
      * 
-     * @returns {Promise<Tag>}
+     * @returns {Promise<ITag>}
      */
     static create(name: string, slug: string, description: string): Promise<ITag> {
         return new Promise((resolve, reject) => {
@@ -37,7 +37,7 @@ class TagDAL {
      * @param {number}  page 
      * @param {number}  limit 
      * 
-     * @returns {Promise<Tag[]>}
+     * @returns {Promise<ITag[]>}
      */
     static findMany(query: any, page: number = 1, limit: number = 25): Promise<ITag[]> {
         return new Promise((resolve, reject) => {
@@ -57,7 +57,7 @@ class TagDAL {
      * 
      * @param {any} query 
      * 
-     * @returns {Promise<Tag>}
+     * @returns {Promise<ITag>}
      */
     static findOne(query: any): Promise<ITag> {
         return new Promise((resolve, reject) => {
@@ -78,7 +78,7 @@ class TagDAL {
      * @param {Tag} category 
      * @param {any} payload
      * 
-     * @returns {Promise<Tag>}
+     * @returns {Promise<ITag>}
      */
     static update(tag: ITag, payload: any): Promise<ITag> {
         return new Promise((resolve, reject) => {
@@ -127,7 +127,7 @@ class TagDAL {
      * 
      * @param {Tag} tag 
      * 
-     * @returns {Promise<any>}
+     * @returns {Promise<ITag>}
      */
     static deleteSoft(tag: ITag): Promise<ITag> {
         return new Promise((resolve, reject) => {

@@ -171,8 +171,8 @@ class CategoryService {
                         };
                     }
                     CategoryDAL.update(category, payload)
-                        .then((category: ICategory) => {
-                            resolve(category);
+                        .then((updatedCategory: ICategory) => {
+                            resolve(updatedCategory);
                         })
                         .catch((error: any) => {
                             done(error);
