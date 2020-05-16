@@ -89,7 +89,7 @@ describe("Store.dal", () => {
             expect(updatedStore.location.coordinates).toContainEqual(LONGITUDE);
         });
 
-        it("Shouldn't update if payload is empty", async () => {
+        it("Shouldn update store email", async () => {
             let store = await createStore("test-store", "test-store-email", "test-store-phone-number", mongoose.Types.ObjectId().toHexString(), "test-store-address", LATITUDE, LONGITUDE).save();
 
             let updatedStore: IStore = await StoreDAL.update(store, { email: "test-store-email-1" });
@@ -117,7 +117,7 @@ describe("Store.dal", () => {
             expect(updatedStore.location.coordinates).toContainEqual(LONGITUDE);
         });
 
-        it("Shouldn't update location if latitude and longitude is not a number", async () => {
+        it("Shouldn't update location if latitude and longitude are not numbers", async () => {
             let store = await createStore("test-store", "test-store-email", "test-store-phone-number", mongoose.Types.ObjectId().toHexString(), "test-store-address", LATITUDE, LONGITUDE).save();
 
             try {
@@ -129,7 +129,7 @@ describe("Store.dal", () => {
             }
         });
 
-        it("Should update location if both latitude and longitude is provide", async () => {
+        it("Should update location if both latitude and longitude are provided", async () => {
             let store = await createStore("test-store", "test-store-email", "test-store-phone-number", mongoose.Types.ObjectId().toHexString(), "test-store-address", LATITUDE, LONGITUDE).save();
 
             let updatedStore: IStore = await StoreDAL.update(store, { latitude: 500, longitude: 500 });
