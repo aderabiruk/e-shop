@@ -13,7 +13,7 @@ class CountryDAL {
      * @param {string} currency_name
      * @param {string} currency_code
      * 
-     * @returns {Promise<Country>}
+     * @returns {Promise<ICountry>}
      */
     static create(name: string, code: string, flag: string, currency_name: string, currency_code: string): Promise<ICountry> {
         return new Promise((resolve, reject) => {
@@ -41,7 +41,7 @@ class CountryDAL {
      * @param {number}  page 
      * @param {number}  limit 
      * 
-     * @returns {Promise<Country[]>}
+     * @returns {Promise<ICountry[]>}
      */
     static findMany(query: any, page: number = 1, limit: number = 25): Promise<ICountry[]> {
         return new Promise((resolve, reject) => {
@@ -82,16 +82,16 @@ class CountryDAL {
      * @param {Country} country 
      * @param {any} payload
      * 
-     * @returns {Promise<Country>}
+     * @returns {Promise<ICountry>}
      */
     static update(country: ICountry, payload: any): Promise<ICountry> {
         return new Promise((resolve, reject) => {
             if (country) {
-                country.name = payload.name ? payload.name : country.name;
-                country.code = payload.code ? payload.code : country.code;
-                country.flag = payload.flag ? payload.flag : country.flag;
-                country.currency_name = payload.currency_name ? payload.currency_name : country.currency_name;
-                country.currency_code = payload.currency_code ? payload.currency_code : country.currency_code;
+                country.name = payload.name != null ? payload.name : country.name;
+                country.code = payload.code != null ? payload.code : country.code;
+                country.flag = payload.flag != null ? payload.flag : country.flag;
+                country.currency_name = payload.currency_name != null ? payload.currency_name : country.currency_name;
+                country.currency_code = payload.currency_code != null ? payload.currency_code : country.currency_code;
                 country.updated_at = new Date();
                 country.save((error, updatedCountry) => {
                     if (error) {
@@ -133,7 +133,7 @@ class CountryDAL {
      * 
      * @param {Country} country 
      * 
-     * @returns {Promise<Country>}
+     * @returns {Promise<ICountry>}
      */
     static deleteSoft(country: ICountry): Promise<ICountry> {
         return new Promise((resolve, reject) => {
