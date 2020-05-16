@@ -129,8 +129,8 @@ class CountryService {
                 },
                 (country: ICountry, done: Function) => {
                     CountryDAL.update(country, payload)
-                        .then((country: ICountry) => {
-                            resolve(country);
+                        .then((updatedCountry: ICountry) => {
+                            resolve(updatedCountry);
                         })
                         .catch((error: any) => {
                             done(error);
