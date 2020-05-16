@@ -30,7 +30,7 @@ describe("Store.dal", () => {
                 ]));
                 expect(error).toEqual(expect.arrayContaining([
                     expect.objectContaining({
-                        field: "country_id",
+                        field: "country",
                     })
                 ]));
             }

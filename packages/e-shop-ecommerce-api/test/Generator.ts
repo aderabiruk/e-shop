@@ -25,11 +25,11 @@ export const createCategory = (name: string, slug: string, parent: string, image
     return category;
 };
 
-export const createCity = (name: string, code: string, country_id: string, latitude: number, longitude: number) => {
+export const createCity = (name: string, code: string, country: string, latitude: number, longitude: number) => {
     let city = new City();
     city.name = name;
     city.code = code;
-    city.country_id = country_id;
+    city.country = country;
     city.location = {
         type: "Point",
         coordinates: [ longitude, latitude ]

@@ -9,18 +9,18 @@ class CityDAL {
      * 
      * @param {string} name
      * @param {string} code
-     * @param {string} country_id
+     * @param {string} country
      * @param {number} latitude
      * @param {number} longitude
      * 
      * @returns {Promise<ICity>}
      */
-    static create(name: string, code: string, country_id: string, latitude: number, longitude: number): Promise<ICity> {
+    static create(name: string, code: string, country: string, latitude: number, longitude: number): Promise<ICity> {
         return new Promise((resolve, reject) => {
             let city = new City();
             city.name = name;
             city.code = code;
-            city.country_id = country_id;
+            city.country = country;
             city.location = {
                 type: "Point",
                 coordinates: [ longitude, latitude ]
@@ -91,7 +91,7 @@ class CityDAL {
             if (city) {
                 city.name = payload.name ? payload.name : city.name;
                 city.code = payload.code ? payload.code : city.code;
-                city.country_id = payload.country_id ? payload.country_id : city.country_id;
+                city.country = payload.country ? payload.country : city.country;
 
                 if (payload.latitude && payload.longitude) {
                     city.location = {
