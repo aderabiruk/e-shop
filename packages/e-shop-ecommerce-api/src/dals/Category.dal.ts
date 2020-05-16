@@ -87,11 +87,11 @@ class CategoryDAL {
     static update(category: ICategory, payload: any): Promise<ICategory> {
         return new Promise((resolve, reject) => {
             if (category) {
-                category.name = payload.name ? payload.name : category.name;
-                category.slug = payload.slug ? payload.slug : category.slug;
-                category.parent = payload.parent ? payload.parent : category.parent;
-                category.image_url = payload.image_url ? payload.image_url : category.image_url;
-                category.description = payload.description ? payload.description : category.description;
+                category.name = payload.name != null ? payload.name : category.name;
+                category.slug = payload.slug != null ? payload.slug : category.slug;
+                category.parent = payload.parent != null ? payload.parent : category.parent;
+                category.image_url = payload.image_url != null ? payload.image_url : category.image_url;
+                category.description = payload.description != null  ? payload.description : category.description;
                 category.updated_at = new Date();
                 category.save((error, savedCategory) => {
                     if (error) {
