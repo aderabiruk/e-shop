@@ -36,8 +36,8 @@ class PaymentMethodService {
                 },
                 (done: Function) => {
                     PaymentMethodDAL.create(name)
-                        .then((PaymentMethod: IPaymentMethod) => {
-                            resolve(PaymentMethod);
+                        .then((paymentMethod: IPaymentMethod) => {
+                            resolve(paymentMethod);
                         })
                         .catch((error: any) => {
                             done(new BadRequestError(error));
@@ -62,8 +62,8 @@ class PaymentMethodService {
     static findAll(page: number = 1, limit: number = 25): Promise<IPaginationResponse> {
         return new Promise((resolve, reject) => {
             PaymentMethodDAL.findMany({ deleted_at: null }, page, limit)
-                .then((PaymentMethods: IPaymentMethod[]) => {
-                    resolve(PaginationAdapter(PaymentMethods, page, limit));
+                .then((paymentMethods: IPaymentMethod[]) => {
+                    resolve(PaginationAdapter(paymentMethods, page, limit));
                 })
                 .catch((error) => {
                     reject(new InternalServerError(error));
@@ -87,8 +87,8 @@ class PaymentMethodService {
             }
             else {
                 PaymentMethodDAL.findOne({ _id: id })
-                    .then((PaymentMethod) => {
-                        resolve(PaymentMethod);
+                    .then((paymentMethod) => {
+                        resolve(paymentMethod);
                     })
                     .catch((error) => {
                         reject(new InternalServerError(error));
@@ -110,9 +110,9 @@ class PaymentMethodService {
             async.waterfall([
                 (done: Function) => {
                     PaymentMethodService.findByID(id)
-                        .then((PaymentMethod: IPaymentMethod) => {
-                            if (PaymentMethod) {
-                                done(null, PaymentMethod);
+                        .then((paymentMethod: IPaymentMethod) => {
+                            if (paymentMethod) {
+                                done(null, paymentMethod);
                             }
                             else {
                                 done(new NotFoundError(Messages.PAYMENT_METHOD_NOT_FOUND));
@@ -122,8 +122,8 @@ class PaymentMethodService {
                             done(error);
                         });
                 },
-                (PaymentMethod: IPaymentMethod, done: Function) => {
-                    PaymentMethodDAL.update(PaymentMethod, payload)
+                (paymentMethod: IPaymentMethod, done: Function) => {
+                    PaymentMethodDAL.update(paymentMethod, payload)
                         .then((updatedPaymentMethod: IPaymentMethod) => {
                             resolve(updatedPaymentMethod);
                         })
