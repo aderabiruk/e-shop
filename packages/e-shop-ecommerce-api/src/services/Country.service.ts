@@ -124,7 +124,7 @@ class CountryService {
                             }
                         })
                         .catch((error: any) => {
-                            done(error);
+                            done(new InternalServerError(error));
                         });
                 },
                 (country: ICountry, done: Function) => {
@@ -133,7 +133,7 @@ class CountryService {
                             resolve(updatedCountry);
                         })
                         .catch((error: any) => {
-                            done(error);
+                            done(new BadRequestError(error));
                         })
                 }
             ], (error: any) => {

@@ -121,7 +121,7 @@ class TagService {
                             }
                         })
                         .catch((error: any) => {
-                            done(error);
+                            done(new InternalServerError(error));
                         });
                 },
                 (tag: ITag, done: Function) => {
@@ -130,7 +130,7 @@ class TagService {
                             resolve(updatedTag);
                         })
                         .catch((error: any) => {
-                            done(error);
+                            done(new BadRequestError(error));
                         })
                 }
             ], (error: any) => {

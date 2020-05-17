@@ -119,7 +119,7 @@ class ShipmentMethodService {
                             }
                         })
                         .catch((error: any) => {
-                            done(error);
+                            done(new InternalServerError(error));
                         });
                 },
                 (shipmentMethod: IShipmentMethod, done: Function) => {
@@ -128,7 +128,7 @@ class ShipmentMethodService {
                             resolve(updatedShipmentMethod);
                         })
                         .catch((error: any) => {
-                            done(error);
+                            done(new BadRequestError(error));
                         })
                 }
             ], (error: any) => {

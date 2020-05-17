@@ -119,7 +119,7 @@ class PaymentMethodService {
                             }
                         })
                         .catch((error: any) => {
-                            done(error);
+                            done(new InternalServerError(error));
                         });
                 },
                 (paymentMethod: IPaymentMethod, done: Function) => {
@@ -128,7 +128,7 @@ class PaymentMethodService {
                             resolve(updatedPaymentMethod);
                         })
                         .catch((error: any) => {
-                            done(error);
+                            done(new BadRequestError(error));
                         })
                 }
             ], (error: any) => {

@@ -140,7 +140,7 @@ class CityService {
                             }
                         })
                         .catch((error: any) => {
-                            done(error);
+                            done(new InternalServerError(error));
                         });
                 },
                 (city: ICity, done: Function) => {
@@ -155,7 +155,7 @@ class CityService {
                                 }
                             })
                             .catch((error: any) => {
-                                done(error);
+                                done(new InternalServerError(error));
                             });
                     }
                     else {
@@ -168,8 +168,8 @@ class CityService {
                             resolve(updatedCity);
                         })
                         .catch((error: any) => {
-                            done(error);
-                        })
+                            done(new BadRequestError(error));
+                        });
                 }
             ], (error: any) => {
                 if (error) {

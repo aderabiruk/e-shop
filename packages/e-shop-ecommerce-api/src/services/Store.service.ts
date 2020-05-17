@@ -146,7 +146,7 @@ class StoreService {
                             }
                         })
                         .catch((error: any) => {
-                            done(error);
+                            done(new InternalServerError(error));
                         });
                 },
                 (store: IStore, done: Function) => {
@@ -161,7 +161,7 @@ class StoreService {
                                 }
                             })
                             .catch((error: any) => {
-                                done(error);
+                                done(new InternalServerError(error));
                             });
                     }
                     else {
@@ -174,7 +174,7 @@ class StoreService {
                             resolve(updatedStore);
                         })
                         .catch((error: any) => {
-                            done(error);
+                            done(new BadRequestError(error));
                         })
                 }
             ], (error: any) => {

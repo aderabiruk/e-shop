@@ -141,7 +141,7 @@ class CategoryService {
                             }
                         })
                         .catch((error: any) => {
-                            done(error);
+                            done(new InternalServerError(error));
                         });
                 },
                 (category: ICategory, done: Function) => {
@@ -156,7 +156,7 @@ class CategoryService {
                                 }
                             })
                             .catch((error: any) => {
-                                done(error);
+                                done(new InternalServerError(error));
                             });
                     }
                     else {
@@ -175,7 +175,7 @@ class CategoryService {
                             resolve(updatedCategory);
                         })
                         .catch((error: any) => {
-                            done(error);
+                            done(new InternalServerError(error));
                         })
                 }
             ], (error: any) => {
