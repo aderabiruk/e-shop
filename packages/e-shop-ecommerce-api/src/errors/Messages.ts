@@ -33,6 +33,11 @@ const Messages = {
     COUNTRY_CURRENCY_CODE_REQUIRED: "Country currency code is required!",
 
     /**
+     * Customer Error Messages
+     */
+    CUSTOMER_NOT_FOUND: "Customer not found!",
+
+    /**
      * Discout Error Messages
      */
     DISCOUNT_INVALID_PERCENTAGE: "Invalid percentage provided!",
@@ -40,13 +45,49 @@ const Messages = {
     /**
      * Order Error Messages
      */
+    ORDER_NOT_FOUND: "Order not found!",
     ORDER_ITEMS_REQUIRED: "Items are required!",
+
+    /**
+     * Payment Error Messages
+     */
+    PAYMENT_NOT_FOUND: "Payment not found!",
+    PAYMENT_ORDER_REQUIRED: "Order is required!",
+    PAYMENT_CUSTOMER_REQUIRED: "Customer is required!",
+    PAYMENT_METHOD_REQUIRED: "Payment method is required!",
+    PAYMENT_STATUS_REQUIRED: "Payment status is required!",
+    PAYMENT_PRICE_REQUIRED: "Payment price is required!",
 
     /**
      * Payment Method Error Messages
      */
     PAYMENT_METHOD_NOT_FOUND: "Payment method not found!",
     PAYMENT_METHOD_NAME_REQUIRED: "Payment method name required!",
+
+    /**
+     * Product Error Messages
+     */
+    PRODUCT_NOT_FOUND: "Product not found!",
+    PRODUCT_NAME_REQUIRED: "Product name is required!",
+    PRODUCT_PRICE_REQUIRED: "Product price is required!",
+    PRODUCT_QUANTITY_REQUIRED: "Product quantity is required!",
+    PRODUCT_IMAGES_REQUIRED: "Product images are required!",
+    PRODUCT_CATEOGRY_REQUIRED: "Product category is required!",
+    PRODUCT_STORE_REQUIRED: "Product store is required!",
+    PRODUCT_WEIGHT_REQUIRED: "Product weight is required!",
+    PRODUCT_WIDTH_REQUIRED: "Product width is required!",
+    PRODUCT_LENGTH_REQUIRED: "Product length is required!",
+    PRODUCT_HEIGHT_REQUIRED: "Product height is required!",
+
+    /**
+     * Shipment Error Messages
+     */
+    SHIPMENT_NOT_FOUND: "Shipment not found!",
+    SHIPMENT_ORDER_REQUIRED: "Order is required!",
+    SHIPMENT_METHOD_REQUIRED: "Shipment method is required!",
+    SHIPMENT_STATUS_REQUIRED: "Shipment status is required!",
+    SHIPMENT_TRACKING_CODE_REQUIRED: "Shipment tracking code is required!",
+
 
     /**
      * Shipment Method Error Messages
