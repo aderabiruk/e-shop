@@ -10,8 +10,8 @@ export interface IProduct extends Document {
     quantity: number;
     description: string;
     image_urls: string[];
-    category_id: string;
-    store_id: string;
+    category: string;
+    store: string;
     tags: ITag[] | string[];
     weight: number;
     dimension: IProductDimension;
@@ -46,11 +46,11 @@ let ProductSchema = new Schema({
 		type: [String],
 		required: true
     },
-    category_id: {
+    category: {
 		type: Schema.Types.ObjectId,
         ref: 'Category',
     },
-    store_id: {
+    store: {
 		type: Schema.Types.ObjectId,
         ref: 'Store',
     },

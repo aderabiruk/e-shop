@@ -13,8 +13,8 @@ class ProductDAL {
      * @param {number}  quantity 
      * @param {string}  description 
      * @param {Array}   image_urls 
-     * @param {string}  category_id 
-     * @param {string}  store_id   
+     * @param {string}  category 
+     * @param {string}  store   
      * @param {Array}   tags 
      * @param {number}  weight
      * @param {number}  width 
@@ -25,7 +25,7 @@ class ProductDAL {
      * 
      * @returns {Promise<IProduct>}
      */
-    static create(name: string, slug: string, price: number, quantity: number, description: string, image_urls: string[], category_id: string, store_id: string, tags: string[], weight: number, width: number, length: number, height: number, is_visible: boolean, is_out_of_stock: boolean): Promise<IProduct> {
+    static create(name: string, slug: string, price: number, quantity: number, description: string, image_urls: string[], category: string, store: string, tags: string[], weight: number, width: number, length: number, height: number, is_visible: boolean, is_out_of_stock: boolean): Promise<IProduct> {
         return new Promise((resolve, reject) => {
             let product = new Product();
             product.name = name;
@@ -34,8 +34,8 @@ class ProductDAL {
             product.quantity = quantity;
             product.description = description;
             product.image_urls = image_urls;
-            product.category_id = category_id;
-            product.store_id = store_id;
+            product.category = category;
+            product.store = store;
             product.tags = tags;
             product.weight = weight ? weight : 0;
             product.dimension = {
@@ -115,8 +115,8 @@ class ProductDAL {
                 product.quantity = payload.quantity ? payload.quantity : product.quantity;
                 product.description = payload.description ? payload.description : product.description;
                 product.image_urls = payload.image_urls ? payload.image_urls : product.image_urls;
-                product.category_id = payload.category_id ? payload.category_id : product.category_id;
-                product.store_id = payload.store_id ? payload.store_id : product.store_id;
+                product.category = payload.category ? payload.category : product.category;
+                product.store = payload.store ? payload.store : product.store;
                 product.tags = payload.tags ? payload.tags : product.tags;
                 product.weight = payload.weight ? payload.weight : product.weight;
                 product.dimension.width = payload.width ? payload.width : product.dimension.width;

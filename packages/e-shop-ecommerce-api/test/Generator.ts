@@ -115,7 +115,7 @@ export const createShipmentMethod = (name: string) => {
     return shipmentMethod;
 };
 
-export const createProduct = (name: string, slug: string, price: number, quantity: number, description: string, image_urls: string[], category_id: string, store_id: string, tags: string[], weight: number, width: number, length: number, height: number, is_visible: boolean, is_out_of_stock: boolean) => {
+export const createProduct = (name: string, slug: string, price: number, quantity: number, description: string, image_urls: string[], category: string, store: string, tags: string[], weight: number, width: number, length: number, height: number, is_visible: boolean, is_out_of_stock: boolean) => {
     let product = new Product();
     product.name = name;
     product.slug = slug;
@@ -123,8 +123,8 @@ export const createProduct = (name: string, slug: string, price: number, quantit
     product.quantity = quantity;
     product.description = description;
     product.image_urls = image_urls;
-    product.category_id = category_id;
-    product.store_id = store_id;
+    product.category = category;
+    product.store = store;
     product.tags = tags;
     product.weight = weight;
     product.dimension = {

@@ -47,8 +47,8 @@ describe("Product DAL", () => {
             expect(product.quantity).toBe(100);
             expect(product.description).toBe("test-product-description");
             expect(product.image_urls.length).toBe(0);
-            expect(product.store_id).toBeTruthy();
-            expect(product.category_id).toBeTruthy();
+            expect(product.store).toBeTruthy();
+            expect(product.category).toBeTruthy();
             expect(product.tags.length).toBe(0);
             expect(product.weight).toBe(0);
             expect(product.dimension.width).toBe(0);
@@ -67,8 +67,8 @@ describe("Product DAL", () => {
             expect(product.quantity).toBe(100);
             expect(product.description).toBe("test-product-description");
             expect(product.image_urls.length).toBe(1);
-            expect(product.store_id).toBeTruthy();
-            expect(product.category_id).toBeTruthy();
+            expect(product.store).toBeTruthy();
+            expect(product.category).toBeTruthy();
             expect(product.tags.length).toBe(1);
             expect(product.weight).toBe(250);
             expect(product.dimension.width).toBe(10);
@@ -90,30 +90,30 @@ describe("Product DAL", () => {
         it("Should filter products by category (Empty Response)", async () => {
             await createProduct("test-product", "test-product", 100, 100, "test-product-description", ["image-url"], mongoose.Types.ObjectId().toHexString(), mongoose.Types.ObjectId().toHexString(), [mongoose.Types.ObjectId().toHexString()], 250, 10, 10, 10, true, false).save();
 
-            let products: IProduct[] = await ProductDAL.findMany({category_id: mongoose.Types.ObjectId()});
+            let products: IProduct[] = await ProductDAL.findMany({category: mongoose.Types.ObjectId()});
             expect(products.length).toBe(0);
         });
 
         it("Should filter products by category (With Response)", async () => {
-            let category_id = mongoose.Types.ObjectId();
-            await createProduct("test-product", "test-product", 100, 100, "test-product-description", ["image-url"], category_id.toHexString(), mongoose.Types.ObjectId().toHexString(), [mongoose.Types.ObjectId().toHexString()], 250, 10, 10, 10, true, false).save();
+            let category = mongoose.Types.ObjectId();
+            await createProduct("test-product", "test-product", 100, 100, "test-product-description", ["image-url"], category.toHexString(), mongoose.Types.ObjectId().toHexString(), [mongoose.Types.ObjectId().toHexString()], 250, 10, 10, 10, true, false).save();
 
-            let products: IProduct[] = await ProductDAL.findMany({ category_id: category_id.toHexString() });
+            let products: IProduct[] = await ProductDAL.findMany({ category: category.toHexString() });
             expect(products.length).toBe(1);
         });
 
         it("Should filter products by store (Empty Response)", async () => {
             await createProduct("test-product", "test-product", 100, 100, "test-product-description", ["image-url"], mongoose.Types.ObjectId().toHexString(), mongoose.Types.ObjectId().toHexString(), [mongoose.Types.ObjectId().toHexString()], 250, 10, 10, 10, true, false).save();
 
-            let products: IProduct[] = await ProductDAL.findMany({store_id: mongoose.Types.ObjectId()});
+            let products: IProduct[] = await ProductDAL.findMany({store: mongoose.Types.ObjectId()});
             expect(products.length).toBe(0);
         });
 
         it("Should filter products by store (With Response)", async () => {
-            let store_id = mongoose.Types.ObjectId();
-            await createProduct("test-product", "test-product", 100, 100, "test-product-description", ["image-url"], mongoose.Types.ObjectId().toHexString(), store_id.toHexString(), [mongoose.Types.ObjectId().toHexString()], 250, 10, 10, 10, true, false).save();
+            let store = mongoose.Types.ObjectId();
+            await createProduct("test-product", "test-product", 100, 100, "test-product-description", ["image-url"], mongoose.Types.ObjectId().toHexString(), store.toHexString(), [mongoose.Types.ObjectId().toHexString()], 250, 10, 10, 10, true, false).save();
 
-            let products: IProduct[] = await ProductDAL.findMany({ store_id: store_id.toHexString() });
+            let products: IProduct[] = await ProductDAL.findMany({ store: store.toHexString() });
             expect(products.length).toBe(1);
         });
     });
@@ -134,8 +134,8 @@ describe("Product DAL", () => {
             expect(fetchedProduct.quantity).toBe(100);
             expect(fetchedProduct.description).toBe("test-product-description");
             expect(fetchedProduct.image_urls.length).toBe(1);
-            expect(fetchedProduct.store_id).toBeTruthy();
-            expect(fetchedProduct.category_id).toBeTruthy();
+            expect(fetchedProduct.store).toBeTruthy();
+            expect(fetchedProduct.category).toBeTruthy();
             expect(fetchedProduct.tags.length).toBe(1);
             expect(fetchedProduct.weight).toBe(250);
             expect(fetchedProduct.dimension.width).toBe(10);
@@ -162,8 +162,8 @@ describe("Product DAL", () => {
             expect(updateProduct.quantity).toBe(100);
             expect(updateProduct.description).toBe("test-product-description");
             expect(updateProduct.image_urls.length).toBe(1);
-            expect(updateProduct.store_id).toBeTruthy();
-            expect(updateProduct.category_id).toBeTruthy();
+            expect(updateProduct.store).toBeTruthy();
+            expect(updateProduct.category).toBeTruthy();
             expect(updateProduct.tags.length).toBe(1);
             expect(updateProduct.weight).toBe(250);
             expect(updateProduct.dimension.width).toBe(10);
@@ -183,8 +183,8 @@ describe("Product DAL", () => {
             expect(updateProduct.quantity).toBe(100);
             expect(updateProduct.description).toBe("test-product-description-new");
             expect(updateProduct.image_urls.length).toBe(0);
-            expect(updateProduct.store_id).toBeTruthy();
-            expect(updateProduct.category_id).toBeTruthy();
+            expect(updateProduct.store).toBeTruthy();
+            expect(updateProduct.category).toBeTruthy();
             expect(updateProduct.tags.length).toBe(1);
             expect(updateProduct.weight).toBe(400);
             expect(updateProduct.dimension.width).toBe(20);
