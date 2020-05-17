@@ -62,7 +62,7 @@ describe("Country.service", () => {
 
     });
 
-    describe("findMany", () => {
+    describe("findAll", () => {
         it("Should return categories", async () => {
             await createCountry("test-country", "test-country", "test-country", "test-country", "test-country").save();
 

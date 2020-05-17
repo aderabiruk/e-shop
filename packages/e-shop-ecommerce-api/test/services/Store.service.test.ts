@@ -95,7 +95,7 @@ describe("Store.service", () => {
         });
     });
 
-    describe("findMany", () => {
+    describe("findAll", () => {
         it("Should return stores", async () => {
             await createStore("test-store", "test-store-email", "test-store-phone-number", mongoose.Types.ObjectId().toHexString(), "test-store-address", LATITUDE, LONGITUDE).save();
 
@@ -106,7 +106,7 @@ describe("Store.service", () => {
         });
     });
 
-    describe("findOne", () => {
+    describe("findByID", () => {
         it("Should return null if id is invalid", async () => {
             let store: IStore = await StoreService.findByID("INVALID-ID");
             expect(store).toBeNull();
@@ -235,7 +235,7 @@ describe("Store.service", () => {
     });
 
     afterEach(async () => {
-        await Store.deleteMany({ name: "test-Store"}); 
+        await Store.deleteMany({ name: "test-store"}); 
     });
 
     afterAll(async () => {

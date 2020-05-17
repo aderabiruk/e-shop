@@ -34,7 +34,7 @@ describe("PaymentMethod.service", () => {
 
     });
 
-    describe("findMany", () => {
+    describe("findAll", () => {
         it("Should return payment methods", async () => {
             await createPaymentMethod("test-payment-method").save();
 

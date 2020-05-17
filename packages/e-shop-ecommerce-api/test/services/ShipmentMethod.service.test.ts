@@ -34,7 +34,7 @@ describe("ShipmentMethod.service", () => {
 
     });
 
-    describe("findMany", () => {
+    describe("findAll", () => {
         it("Should return shipment methods", async () => {
             await createShipmentMethod("test-shipment-method").save();
 

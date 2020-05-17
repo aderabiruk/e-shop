@@ -63,7 +63,7 @@ describe("Category.service", () => {
         });
     });
 
-    describe("findMany", () => {
+    describe("findAll", () => {
         it("Should return categories", async () => {
             await createCategory("test-category", "test-category", mongoose.Types.ObjectId().toString(), "test-image-url", "test-category-description").save();
 

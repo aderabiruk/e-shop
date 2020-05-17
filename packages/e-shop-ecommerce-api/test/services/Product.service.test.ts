@@ -150,7 +150,7 @@ describe("Product.service", () => {
         });
     });
 
-    describe("findOne", () => {
+    describe("findByID", () => {
         it("Should return null if id is invalid", async () => {
             let product: IProduct = await ProductService.findByID("INVALID-ID");
             expect(product).toBeNull();

@@ -36,7 +36,7 @@ describe("Tag.service", () => {
 
     });
 
-    describe("findMany", () => {
+    describe("findAll", () => {
         it("Should return tags", async () => {
             await createTag("test-tag", "test-tag", "test-tag").save();
 

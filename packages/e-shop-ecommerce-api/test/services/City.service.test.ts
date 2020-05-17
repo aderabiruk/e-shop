@@ -87,7 +87,7 @@ describe("City.service", () => {
         });
     });
 
-    describe("findMany", () => {
+    describe("findAll", () => {
         it("Should return cities", async () => {
             await createCity("test-city", "test-city-code", mongoose.Types.ObjectId().toHexString(), LATITUDE, LONGITUDE).save();
 
@@ -98,7 +98,7 @@ describe("City.service", () => {
         });
     });
 
-    describe("findOne", () => {
+    describe("findByID", () => {
         it("Should return null if id is invalid", async () => {
             let city: ICity = await CityService.findByID("INVALID-ID");
             expect(city).toBeNull();
