@@ -25,14 +25,16 @@ let CategorySchema = new Schema({
 		required: true
     },
     image_url: {
-		type: String
+        type: String,
+        default: null
     },
     description: {
 		type: String
     },
     parent: {
 		type: Schema.Types.ObjectId,
-        ref: 'Category'
+        ref: 'Category',
+        default: null
     },
 	created_at: {
 		type: Date,
