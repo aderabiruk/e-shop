@@ -47,7 +47,7 @@ export class ForbiddenError extends Error {
 };
 
 /**
- * NotFound Error
+ * Not Found Error
  */
 export class NotFoundError extends Error {
     constructor(error: string) {
@@ -58,7 +58,7 @@ export class NotFoundError extends Error {
 };
 
 /**
- * InternalServer Error
+ * Internal Server Error
  */
 export class InternalServerError extends Error {
     constructor(error?: string) {
@@ -68,12 +68,24 @@ export class InternalServerError extends Error {
     }
 };
 
+
 /**
- * ServiceUnavailable Error
+ * Not Implemented Error
+ */
+export class NotImplementedError extends Error {
+    constructor(error?: string) {
+        super(501, [
+            error ? `Not Implemented: ${error}` : Messages.NOT_IMPLEMENTED_ERROR
+        ]);
+    }
+};
+
+/**
+ * Service Unavailable Error
  */
 export class ServiceUnavailableError extends Error {
     constructor(error?: string) {
-        super(500, [
+        super(502, [
             error ? `Service Unavailable: ${error}` : Messages.SERVICE_UNAVAILABLE_ERROR
         ]);
     }

@@ -5,6 +5,7 @@ const Messages = {
     UNAUTHORIZED_ERROR: "Authorization Failure: You're not authorized!",
     FORBIDDEN_ERROR: "Authorization Failure: You're not allowed!",
     INTERNAL_SERVER_ERROR: "Internal Error: Something went wrong!",
+    NOT_IMPLEMENTED_ERROR: 'Not Implemented!',
     SERVICE_UNAVAILABLE_ERROR: "Service Unavailable!",
 
     /**
