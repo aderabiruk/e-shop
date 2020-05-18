@@ -48,7 +48,7 @@ class CategoryService {
                                 }
                             })
                             .catch((error: any) => {
-                                done(new InternalServerError(error));
+                                done(new BadRequestError([ { field: "parent", message: Messages.CATEGORY_NOT_FOUND } ]));
                             });
                     }
                     else {
@@ -81,9 +81,54 @@ class CategoryService {
      * 
      * @returns {Promise<IPaginationResponse[]>}
      */
-    static findAll(page: number = 1, limit: number = 25): Promise<IPaginationResponse> {
+    static findAll(term: string, page: number = 1, limit: number = 25): Promise<IPaginationResponse> {
         return new Promise((resolve, reject) => {
-            CategoryDAL.findMany({ deleted_at: null }, page, limit)
+            let query: any;
+            if (term) {
+                query = { $or: [ { name: { $regex: new RegExp(term, "i") } }, { description: { $regex: new RegExp(term, "i") } } ], deleted_at: null }
+            }
+            else {
+                query = { deleted_at: null }
+            }
+
+            async.waterfall([
+                (done: Function) => {
+                    CategoryDAL.count(query)
+                        .then((count) => {
+                            done(null, count);
+                        })
+                        .catch((error) => {
+                            done(new InternalServerError(error));
+                        });
+                },
+                (count: number, done: Function) => {
+                    CategoryDAL.findMany(query, page, limit)
+                        .then((categories: ICategory[]) => {
+                            resolve(PaginationAdapter(categories, page, limit, count));
+                        })
+                        .catch((error) => {
+                            done(new InternalServerError(error));
+                        });
+                }
+            ], (error: any) => {
+                if (error) {
+                    reject(error);
+                }
+            });
+        });
+    }
+
+    /**
+     * Find All Parent Categories
+     * 
+     * @param {number} page
+     * @param {number} limit
+     * 
+     * @returns {Promise<IPaginationResponse[]>}
+     */
+    static findParents(page: number = 1, limit: number = 25): Promise<IPaginationResponse> {
+        return new Promise((resolve, reject) => {
+            CategoryDAL.findMany({ parent: null, deleted_at: null }, page, limit)
                 .then((categories: ICategory[]) => {
                     resolve(PaginationAdapter(categories, page, limit));
                 })
@@ -95,10 +140,36 @@ class CategoryService {
     }
 
     /**
-     * Find Category By ID
+     * Find Subcategories
      * 
+     * @param {string} parent
      * @param {number} page
      * @param {number} limit
+     * 
+     * @returns {Promise<IPaginationResponse[]>}
+     */
+    static findSubcategories(parent: string, page: number = 1, limit: number = 25): Promise<IPaginationResponse> {
+        return new Promise((resolve, reject) => {
+            if (mongoose.isValidObjectId(parent)) {
+                CategoryDAL.findMany({ parent: parent, deleted_at: null }, page, limit)
+                    .then((categories: ICategory[]) => {
+                        resolve(PaginationAdapter(categories, page, limit));
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                        reject(new InternalServerError(error));
+                    });
+            }
+            else {
+                resolve(PaginationAdapter([], page, limit));
+            }
+        });
+    }
+
+    /**
+     * Find Category By ID
+     * 
+     * @param {string} id
      * 
      * @returns {Promise<ICategory[]>}
      */
