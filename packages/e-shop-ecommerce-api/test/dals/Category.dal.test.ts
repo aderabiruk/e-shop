@@ -32,6 +32,15 @@ describe("Category.dal", () => {
         });
     });
 
+    describe("count", () => {
+        it("Should return number of categories", async () => {
+            await createCategory("test-category", "test-category", mongoose.Types.ObjectId().toString(), "test-image-url", "test-category-description").save();
+
+            let count: number = await CategoryDAL.count({});
+            expect(count).toBeGreaterThan(0);
+        });
+    });
+
     describe("findMany", () => {
         it("Should return categories", async () => {
             await createCategory("test-category", "test-category", mongoose.Types.ObjectId().toString(), "test-image-url", "test-category-description").save();
