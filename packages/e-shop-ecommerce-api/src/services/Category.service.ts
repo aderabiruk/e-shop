@@ -10,6 +10,43 @@ import { NotFoundError, BadRequestError, InternalServerError } from '../errors/E
 import { IPaginationResponse, PaginationAdapter } from '../utilities/adapters/Pagination';
 
 class CategoryService {
+    /**
+     * Filter Categories
+     * 
+     * @param {any}     query
+     * @param {number}  page
+     * @param {number}  limit
+     * 
+     * @returns {Promise<IPaginationResponse[]>}
+     */
+    private static filter(query: any, page: number = 1, limit: number = 25): Promise<IPaginationResponse> {
+        return new Promise((resolve, reject) => {
+            async.waterfall([
+                (done: Function) => {
+                    CategoryDAL.count(query)
+                        .then((count) => {
+                            done(null, count);
+                        })
+                        .catch((error) => {
+                            done(new InternalServerError(error));
+                        });
+                },
+                (count: number, done: Function) => {
+                    CategoryDAL.findMany(query, page, limit)
+                        .then((categories: ICategory[]) => {
+                            resolve(PaginationAdapter(categories, page, limit, count));
+                        })
+                        .catch((error) => {
+                            done(new InternalServerError(error));
+                        });
+                }
+            ], (error: any) => {
+                if (error) {
+                    reject(error);
+                }
+            });
+        });
+    }
 
     /**
      * Create Category
@@ -21,7 +58,7 @@ class CategoryService {
      * 
      * @returns {Promise<ICategory>}
      */
-    static create(name: string, parent: string, image_url: string, description: string): Promise<ICategory> {
+    public static create(name: string, parent: string, image_url: string, description: string): Promise<ICategory> {
         return new Promise((resolve, reject) => {
             async.waterfall([
                 (done: Function) => {
@@ -73,6 +110,8 @@ class CategoryService {
         });
     }
 
+    
+
     /**
      * Find All Categories
      * 
@@ -81,7 +120,7 @@ class CategoryService {
      * 
      * @returns {Promise<IPaginationResponse[]>}
      */
-    static findAll(term: string, page: number = 1, limit: number = 25): Promise<IPaginationResponse> {
+    public static findAll(term: string = "", page: number = 1, limit: number = 25): Promise<IPaginationResponse> {
         return new Promise((resolve, reject) => {
             let query: any;
             if (term) {
@@ -91,32 +130,17 @@ class CategoryService {
                 query = { deleted_at: null }
             }
 
-            async.waterfall([
-                (done: Function) => {
-                    CategoryDAL.count(query)
-                        .then((count) => {
-                            done(null, count);
-                        })
-                        .catch((error) => {
-                            done(new InternalServerError(error));
-                        });
-                },
-                (count: number, done: Function) => {
-                    CategoryDAL.findMany(query, page, limit)
-                        .then((categories: ICategory[]) => {
-                            resolve(PaginationAdapter(categories, page, limit, count));
-                        })
-                        .catch((error) => {
-                            done(new InternalServerError(error));
-                        });
-                }
-            ], (error: any) => {
-                if (error) {
+            CategoryService.filter(query, page, limit)
+                .then((result: IPaginationResponse) => {
+                    resolve(result);
+                })
+                .catch((error) => {
                     reject(error);
-                }
-            });
+                });
         });
     }
+
+    
 
     /**
      * Find All Parent Categories
@@ -128,14 +152,14 @@ class CategoryService {
      */
     static findParents(page: number = 1, limit: number = 25): Promise<IPaginationResponse> {
         return new Promise((resolve, reject) => {
-            CategoryDAL.findMany({ parent: null, deleted_at: null }, page, limit)
-                .then((categories: ICategory[]) => {
-                    resolve(PaginationAdapter(categories, page, limit));
+            let query: any = { parent: null, deleted_at: null };
+            CategoryService.filter(query, page, limit)
+                .then((result: IPaginationResponse) => {
+                    resolve(result);
                 })
                 .catch((error) => {
-                    reject(new InternalServerError(error));
+                    reject(error);
                 });
-
         });
     }
 
@@ -151,17 +175,17 @@ class CategoryService {
     static findSubcategories(parent: string, page: number = 1, limit: number = 25): Promise<IPaginationResponse> {
         return new Promise((resolve, reject) => {
             if (mongoose.isValidObjectId(parent)) {
-                CategoryDAL.findMany({ parent: parent, deleted_at: null }, page, limit)
-                    .then((categories: ICategory[]) => {
-                        resolve(PaginationAdapter(categories, page, limit));
+                let query: any = { parent: parent, deleted_at: null }
+                CategoryService.filter(query, page, limit)
+                    .then((result: IPaginationResponse) => {
+                        resolve(result);
                     })
                     .catch((error) => {
-                        console.log(error);
-                        reject(new InternalServerError(error));
+                        reject(error);
                     });
             }
             else {
-                resolve(PaginationAdapter([], page, limit));
+                resolve(PaginationAdapter([], page, limit, 0));
             }
         });
     }
@@ -173,7 +197,7 @@ class CategoryService {
      * 
      * @returns {Promise<ICategory[]>}
      */
-    static findByID(id: string): Promise<ICategory> {
+    public static findByID(id: string): Promise<ICategory> {
         return new Promise((resolve, reject) => {
             if (!mongoose.isValidObjectId(id)) {
                 resolve(null);
@@ -198,7 +222,7 @@ class CategoryService {
      * 
      * @returns {Promise<ICategory>}
      */
-    static update(id: string, payload: any = {}): Promise<ICategory> {
+    public static update(id: string, payload: any = {}): Promise<ICategory> {
         return new Promise((resolve, reject) => {
             async.waterfall([
                 (done: Function) => {

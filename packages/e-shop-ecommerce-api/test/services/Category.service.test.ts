@@ -43,6 +43,22 @@ describe("Category.service", () => {
             }
         });
 
+        it("Should return error if parent category id is invalid", async () => {
+            try {
+                await CategoryService.create("test-category", "INVALID-ID", null, null);
+                fail();
+            }
+            catch (error) {
+                expect(error.statusCode).toBe(400);
+                expect(error.payload.errors).toEqual(expect.arrayContaining([
+                    expect.objectContaining({
+                        field: "parent",
+                        message: Messages.CATEGORY_NOT_FOUND
+                    })
+                ]));
+            }
+        });
+
         it("Should create category without parent, image and description", async () => {
             let category: ICategory = await CategoryService.create("test-category", null, null, null);
             expect(category.name).toBe("test-category");
@@ -64,13 +80,157 @@ describe("Category.service", () => {
     });
 
     describe("findAll", () => {
-        it("Should return categories", async () => {
-            await createCategory("test-category", "test-category", mongoose.Types.ObjectId().toString(), "test-image-url", "test-category-description").save();
+        it("Should return all categories", async () => {
+            let category: ICategory = await createCategory("test-category", "test-category", mongoose.Types.ObjectId().toString(), "test-image-url", "test-category-description").save();
 
             let response: IPaginationResponse = await CategoryService.findAll();
             expect(response.data.length).toBeGreaterThan(0);
             expect(response.metadata.pagination.page).toBe(1);
             expect(response.metadata.pagination.limit).toBe(25);
+            expect(response.metadata.pagination.numberOfPages).toBeGreaterThan(0);
+            expect(response.metadata.pagination.numberOfResults).toBeGreaterThan(0);
+
+            expect(response.data).toEqual(expect.arrayContaining([
+                expect.objectContaining({
+                    _id: category._id,
+                    name: category.name,
+                    slug: category.slug
+                })
+            ]));
+        });
+
+        it("Should filter categories", async () => {
+            let category: ICategory = await createCategory("test-category", "test-category", mongoose.Types.ObjectId().toString(), "test-image-url", "test-category-description").save();
+
+            let response: IPaginationResponse = await CategoryService.findAll("category");
+            expect(response.data.length).toBeGreaterThan(0);
+            expect(response.metadata.pagination.page).toBe(1);
+            expect(response.metadata.pagination.limit).toBe(25);
+            expect(response.metadata.pagination.numberOfPages).toBeGreaterThan(0);
+            expect(response.metadata.pagination.numberOfResults).toBeGreaterThan(0);
+
+            expect(response.data).toEqual(expect.arrayContaining([
+                expect.objectContaining({
+                    _id: category._id,
+                    name: category.name,
+                    slug: category.slug
+                })
+            ]));
+        });
+
+        it("Should paginate results", async () => {
+            let category: ICategory = await createCategory("test-category", "test-category", mongoose.Types.ObjectId().toString(), "test-image-url", "test-category-description").save();
+
+            let response: IPaginationResponse = await CategoryService.findAll("", 1, 5);
+            expect(response.data.length).toBeGreaterThan(0);
+            expect(response.metadata.pagination.page).toBe(1);
+            expect(response.metadata.pagination.limit).toBe(5);
+            expect(response.metadata.pagination.numberOfPages).toBeGreaterThan(0);
+            expect(response.metadata.pagination.numberOfResults).toBeGreaterThan(0);
+
+            expect(response.data).toEqual(expect.arrayContaining([
+                expect.objectContaining({
+                    _id: category._id,
+                    name: category.name,
+                    slug: category.slug
+                })
+            ]));
+        });
+    });
+
+    describe("findParents", () => {
+        it("Should return all parent categories", async () => {
+            let category: ICategory = await createCategory("test-category", "test-category", null, "test-image-url", "test-category-description").save();
+
+            let response: IPaginationResponse = await CategoryService.findParents();
+            expect(response.data.length).toBeGreaterThan(0);
+            expect(response.metadata.pagination.page).toBe(1);
+            expect(response.metadata.pagination.limit).toBe(25);
+            expect(response.metadata.pagination.numberOfPages).toBeGreaterThan(0);
+            expect(response.metadata.pagination.numberOfResults).toBeGreaterThan(0);
+
+            expect(response.data).toEqual(expect.arrayContaining([
+                expect.objectContaining({
+                    _id: category._id,
+                    name: category.name,
+                    slug: category.slug
+                })
+            ]));
+        });
+
+        it("Should paginate results", async () => {
+            let category: ICategory = await createCategory("test-category", "test-category", null, "test-image-url", "test-category-description").save();
+
+            let response: IPaginationResponse = await CategoryService.findParents(1, 5);
+            expect(response.data.length).toBeGreaterThan(0);
+            expect(response.metadata.pagination.page).toBe(1);
+            expect(response.metadata.pagination.limit).toBe(5);
+            expect(response.metadata.pagination.numberOfPages).toBeGreaterThan(0);
+            expect(response.metadata.pagination.numberOfResults).toBeGreaterThan(0);
+
+            expect(response.data).toEqual(expect.arrayContaining([
+                expect.objectContaining({
+                    _id: category._id,
+                    name: category.name,
+                    slug: category.slug
+                })
+            ]));
+        });
+    });
+
+    describe("findSubcategories", () => {
+        it("Should return all subcategories", async () => {
+            let parent: ICategory = await createCategory("test-category-parent", "test-category-parent", null, "test-image-url", "test-category-parent-description").save();
+            let category: ICategory = await createCategory("test-category", "test-category", parent._id, "test-image-url", "test-category-description").save();
+
+            let response: IPaginationResponse = await CategoryService.findSubcategories(parent._id)
+            expect(response.data.length).toBeGreaterThan(0);
+            expect(response.metadata.pagination.page).toBe(1);
+            expect(response.metadata.pagination.limit).toBe(25);
+            expect(response.metadata.pagination.numberOfPages).toBeGreaterThan(0);
+            expect(response.metadata.pagination.numberOfResults).toBeGreaterThan(0);
+            
+            expect(response.data).toEqual(expect.arrayContaining([
+                expect.objectContaining({
+                    _id: category._id,
+                    name: category.name,
+                    slug: category.slug
+                })
+            ]));
+            expect(response.data).not.toEqual(expect.arrayContaining([
+                expect.objectContaining({
+                    _id: parent._id,
+                    name: parent.name,
+                    slug: parent.slug
+                })
+            ]));
+        });
+
+        it("Should paginate results", async () => {
+            let parent: ICategory = await createCategory("test-category-parent", "test-category-parent", null, "test-image-url", "test-category-parent-description").save();
+            let category: ICategory = await createCategory("test-category", "test-category", parent._id, "test-image-url", "test-category-description").save();
+
+            let response: IPaginationResponse = await CategoryService.findSubcategories(parent._id, 1, 5);
+            expect(response.data.length).toBeGreaterThan(0);
+            expect(response.metadata.pagination.page).toBe(1);
+            expect(response.metadata.pagination.limit).toBe(5);
+            expect(response.metadata.pagination.numberOfPages).toBeGreaterThan(0);
+            expect(response.metadata.pagination.numberOfResults).toBeGreaterThan(0);
+
+            expect(response.data).toEqual(expect.arrayContaining([
+                expect.objectContaining({
+                    _id: category._id,
+                    name: category.name,
+                    slug: category.slug
+                })
+            ]));
+            expect(response.data).not.toEqual(expect.arrayContaining([
+                expect.objectContaining({
+                    _id: parent._id,
+                    name: parent.name,
+                    slug: parent.slug
+                })
+            ]));
         });
     });
 
