@@ -11,6 +11,44 @@ import { IPaginationResponse, PaginationAdapter } from '../utilities/adapters/Pa
 class CountryService {
 
     /**
+     * Filter countries
+     * 
+     * @param {any}     query
+     * @param {number}  page
+     * @param {number}  limit
+     * 
+     * @returns {Promise<IPaginationResponse[]>}
+     */
+    private static filter(query: any, page: number = 1, limit: number = 25): Promise<IPaginationResponse> {
+        return new Promise((resolve, reject) => {
+            async.waterfall([
+                (done: Function) => {
+                    CountryDAL.count(query)
+                        .then((count) => {
+                            done(null, count);
+                        })
+                        .catch((error) => {
+                            done(new InternalServerError(error));
+                        });
+                },
+                (count: number, done: Function) => {
+                    CountryDAL.findMany(query, page, limit)
+                        .then((countries: ICountry[]) => {
+                            resolve(PaginationAdapter(countries, page, limit, count));
+                        })
+                        .catch((error) => {
+                            done(new InternalServerError(error));
+                        });
+                }
+            ], (error: any) => {
+                if (error) {
+                    reject(error);
+                }
+            });
+        });
+    }
+
+    /**
      * Create Country
      * 
      * @param {string} name
@@ -21,7 +59,7 @@ class CountryService {
      * 
      * @returns {Promise<ICountry>}
      */
-    static create(name: string, code: string, flag: string, currency_name: string, currency_code: string): Promise<ICountry> {
+    public static create(name: string, code: string, flag: string, currency_name: string, currency_code: string): Promise<ICountry> {
         return new Promise((resolve, reject) => {
             async.waterfall([
                 (done: Function) => {
@@ -65,16 +103,23 @@ class CountryService {
      * 
      * @returns {Promise<IPaginationResponse[]>}
      */
-    static findAll(page: number = 1, limit: number = 25): Promise<IPaginationResponse> {
+    public static findAll(term: string = "", page: number = 1, limit: number = 25): Promise<IPaginationResponse> {
         return new Promise((resolve, reject) => {
-            CountryDAL.findMany({ deleted_at: null }, page, limit)
-                .then((countries: ICountry[]) => {
-                    resolve(PaginationAdapter(countries, page, limit));
+            let query: any;
+            if (term) {
+                query = { $or: [ { name: { $regex: new RegExp(term, "i") } }, { code: { $regex: new RegExp(term, "i") } } ], deleted_at: null }
+            }
+            else {
+                query = { deleted_at: null }
+            }
+
+            CountryService.filter(query, page, limit)
+                .then((result: IPaginationResponse) => {
+                    resolve(result);
                 })
                 .catch((error) => {
-                    reject(new InternalServerError(error));
+                    reject(error);
                 });
-
         });
     }
 
@@ -85,14 +130,14 @@ class CountryService {
      * 
      * @returns {Promise<ICountry[]>}
      */
-    static findByID(id: string): Promise<ICountry> {
+    public static findByID(id: string): Promise<ICountry> {
         return new Promise((resolve, reject) => {
             if (!mongoose.isValidObjectId(id)) {
                 resolve(null);
             }
             else {
                 CountryDAL.findOne({ _id: id })
-                    .then((country) => {
+                    .then((country: ICountry) => {
                         resolve(country);
                     })
                     .catch((error) => {
@@ -110,7 +155,7 @@ class CountryService {
      * 
      * @returns {Promise<ICountry>}
      */
-    static update(id: string, payload: any = {}): Promise<ICountry> {
+    public static update(id: string, payload: any = {}): Promise<ICountry> {
         return new Promise((resolve, reject) => {
             async.waterfall([
                 (done: Function) => {

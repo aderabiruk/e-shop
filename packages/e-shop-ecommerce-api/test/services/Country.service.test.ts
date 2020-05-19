@@ -58,18 +58,50 @@ describe("Country.service", () => {
             expect(country.flag).toBe("test-country");
             expect(country.currency_name).toBe("test-country");
             expect(country.currency_code).toBe("test-country");
-        });
-
+        })
     });
 
     describe("findAll", () => {
-        it("Should return categories", async () => {
-            await createCountry("test-country", "test-country", "test-country", "test-country", "test-country").save();
+        it("Should return all categories", async () => {
+            let country: ICountry = await createCountry("test-country", "test-country", "test-country", "test-country", "test-country").save();
 
             let response: IPaginationResponse = await CountryService.findAll();
             expect(response.data.length).toBeGreaterThan(0);
             expect(response.metadata.pagination.page).toBe(1);
             expect(response.metadata.pagination.limit).toBe(25);
+            expect(response.metadata.pagination.numberOfPages).toBeGreaterThan(0);
+            expect(response.metadata.pagination.numberOfResults).toBeGreaterThan(0);
+
+            expect(response.data).toEqual(expect.arrayContaining([
+                expect.objectContaining({
+                    _id: country._id,
+                    name: country.name,
+                    code: country.code,
+                    currency_name: country.currency_name,
+                    currency_code: country.currency_code
+                })
+            ]));
+        });
+
+        it("Should paginate results", async () => {
+            let country: ICountry = await createCountry("test-country", "test-country", "test-country", "test-country", "test-country").save();
+
+            let response: IPaginationResponse = await CountryService.findAll("", 1, 5);
+            expect(response.data.length).toBeGreaterThan(0);
+            expect(response.metadata.pagination.page).toBe(1);
+            expect(response.metadata.pagination.limit).toBe(5);
+            expect(response.metadata.pagination.numberOfPages).toBeGreaterThan(0);
+            expect(response.metadata.pagination.numberOfResults).toBeGreaterThan(0);
+
+            expect(response.data).toEqual(expect.arrayContaining([
+                expect.objectContaining({
+                    _id: country._id,
+                    name: country.name,
+                    code: country.code,
+                    currency_name: country.currency_name,
+                    currency_code: country.currency_code
+                })
+            ]));
         });
     });
 
