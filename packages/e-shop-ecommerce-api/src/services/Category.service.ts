@@ -10,6 +10,7 @@ import { NotFoundError, BadRequestError, InternalServerError } from '../errors/E
 import { IPaginationResponse, PaginationAdapter } from '../utilities/adapters/Pagination';
 
 class CategoryService {
+    
     /**
      * Filter Categories
      * 
