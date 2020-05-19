@@ -54,6 +54,15 @@ describe("Country.dal", () => {
         });
     });
 
+    describe("count", () => {
+        it("Should return number of countries", async () => {
+            await createCountry("test-country", "test-country", "test-country", "test-country", "test-country").save();
+
+            let count: number = await CountryDAL.count({});
+            expect(count).toBeGreaterThan(0);
+        });
+    });
+
     describe("findMany", () => {
         it("Should return countries", async () => {
             await createCountry("test-country", "test-country", "test-country", "test-country", "test-country").save();
