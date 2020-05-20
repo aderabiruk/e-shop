@@ -3,7 +3,7 @@ import async from 'async';
 import mongoose from 'mongoose';
 import evalidate from 'evalidate';
 
-import { ITag } from '../models/Tag';
+import Tag, { ITag } from '../models/Tag';
 import TagDAL from '../dals/Tag.dal';
 import Messages from '../errors/Messages';
 import { NotFoundError, BadRequestError, InternalServerError } from '../errors/Errors';
@@ -11,6 +11,44 @@ import { IPaginationResponse, PaginationAdapter } from '../utilities/adapters/Pa
 
 
 class TagService {
+
+    /**
+     * Filter Tags
+     * 
+     * @param {any}     query
+     * @param {number}  page
+     * @param {number}  limit
+     * 
+     * @returns {Promise<IPaginationResponse[]>}
+     */
+    private static filter(query: any, page: number = 1, limit: number = 25): Promise<IPaginationResponse> {
+        return new Promise((resolve, reject) => {
+            async.waterfall([
+                (done: Function) => {
+                    TagDAL.count(query)
+                        .then((count) => {
+                            done(null, count);
+                        })
+                        .catch((error) => {
+                            done(new InternalServerError(error));
+                        });
+                },
+                (count: number, done: Function) => {
+                    TagDAL.findMany(query, page, limit)
+                        .then((tags: ITag[]) => {
+                            resolve(PaginationAdapter(tags, page, limit, count));
+                        })
+                        .catch((error) => {
+                            done(new InternalServerError(error));
+                        });
+                }
+            ], (error: any) => {
+                if (error) {
+                    reject(error);
+                }
+            });
+        });
+    }
     
     /**
      * Create Tag
@@ -56,19 +94,28 @@ class TagService {
     /**
      * Find All Tags
      * 
+     * @param {string} terms
      * @param {number} page
      * @param {number} limit
      * 
      * @returns {Promise<IPaginationResponse[]>}
      */
-    static findAll(page: number = 1, limit: number = 25): Promise<IPaginationResponse> {
+    static findAll(term: string = "", page: number = 1, limit: number = 25): Promise<IPaginationResponse> {
         return new Promise((resolve, reject) => {
-            TagDAL.findMany({ deleted_at: null }, page, limit)
-                .then((tags: ITag[]) => {
-                    resolve(PaginationAdapter(tags, page, limit));
+            let query: any;
+            if (term) {
+                query = { $or: [ { name: { $regex: new RegExp(term, "i") } }, { description: { $regex: new RegExp(term, "i") } } ], deleted_at: null }
+            }
+            else {
+                query = { deleted_at: null }
+            }
+            
+            TagService.filter(query, page, limit)
+                .then((result: IPaginationResponse) => {
+                    resolve(result);
                 })
                 .catch((error) => {
-                    reject(new InternalServerError(error));
+                    reject(error);
                 });
 
         });
@@ -77,8 +124,7 @@ class TagService {
     /**
      * Find Tag By ID
      * 
-     * @param {number} page
-     * @param {number} limit
+     * @param {string} id
      * 
      * @returns {Promise<ITag[]>}
      */
@@ -125,6 +171,13 @@ class TagService {
                         });
                 },
                 (tag: ITag, done: Function) => {
+                    if (payload && payload.name) {
+                        payload = {
+                            ...payload,
+                            slug: voca.slugify(payload.name)
+                        };
+                    }
+                    
                     TagDAL.update(tag, payload)
                         .then((updatedTag: ITag) => {
                             resolve(updatedTag);
