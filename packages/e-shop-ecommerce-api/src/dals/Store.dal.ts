@@ -44,12 +44,10 @@ class StoreDAL {
      * Count Stores
      * 
      * @param {any}     query 
-     * @param {number}  page 
-     * @param {number}  limit 
      * 
      * @returns {Promise<number>}
      */
-    static count(query: any, page: number = 1, limit: number = 25): Promise<number> {
+    static count(query: any): Promise<number> {
         return new Promise((resolve, reject) => {
             Store.count(query).exec((error, count) => {
                 if (error) {

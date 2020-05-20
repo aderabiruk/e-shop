@@ -31,6 +31,26 @@ class TagDAL {
     }
 
     /**
+     * Count Tags
+     * 
+     * @param {any}     query 
+     * 
+     * @returns {Promise<number>}
+     */
+    static count(query: any): Promise<number> {
+        return new Promise((resolve, reject) => {
+            Tag.count(query).exec((error, count) => {
+                if (error) {
+                    reject(transform_mongoose_error(error, { capitalize: true, humanize: true }))
+                }
+                else {
+                    resolve(count);
+                }
+            });
+        });
+    }
+
+    /**
      * Find Many Tags
      * 
      * @param {any}     query 

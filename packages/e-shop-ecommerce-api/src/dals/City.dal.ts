@@ -39,9 +39,7 @@ class CityDAL {
     /**
      * Count Cities
      * 
-     * @param {any}     query 
-     * @param {number}  page 
-     * @param {number}  limit 
+     * @param {any} query 
      * 
      * @returns {Promise<number>}
      */
@@ -49,7 +47,6 @@ class CityDAL {
         return new Promise((resolve, reject) => {
             City.count(query).exec((error, count) => {
                 if (error) {
-                    console.log(error)
                     reject(transform_mongoose_error(error, { capitalize: true, humanize: true }))
                 }
                 else {
