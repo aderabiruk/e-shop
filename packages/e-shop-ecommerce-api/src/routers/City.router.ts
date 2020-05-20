@@ -18,7 +18,7 @@ router
      */
     .get("/country/:id", CityController.findByCountry)
     /**
-     * Find By Location
+     * Find Cities By Location
      */
     .post("/location", CityController.findByLocation)
     /**
