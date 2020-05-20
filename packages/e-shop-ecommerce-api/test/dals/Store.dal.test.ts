@@ -6,8 +6,8 @@ import { createStore } from '../Generator';
 
 const app = require("../../src/app");
 
-const LATITUDE = 125;
-const LONGITUDE = 99;
+const LATITUDE = 50;
+const LONGITUDE = 50;
 
 describe("Store.dal", () => {
         
@@ -45,6 +45,15 @@ describe("Store.dal", () => {
 
             let stores: IStore[] = await StoreDAL.findMany({});
             expect(stores.length).toBeGreaterThan(0);
+        });
+    });
+
+    describe("count", () => {
+        it("Should return count", async () => {
+            await createStore("test-store", "test-store-email", "test-store-phone-number", mongoose.Types.ObjectId().toHexString(), "test-store-address", LATITUDE, LONGITUDE).save();
+
+            let count: number = await StoreDAL.count({});
+            expect(count).toBeGreaterThan(0);
         });
     });
 
@@ -132,15 +141,15 @@ describe("Store.dal", () => {
         it("Should update location if both latitude and longitude are provided", async () => {
             let store = await createStore("test-store", "test-store-email", "test-store-phone-number", mongoose.Types.ObjectId().toHexString(), "test-store-address", LATITUDE, LONGITUDE).save();
 
-            let updatedStore: IStore = await StoreDAL.update(store, { latitude: 500, longitude: 500 });
+            let updatedStore: IStore = await StoreDAL.update(store, { latitude: 20, longitude: 20 });
             expect(updatedStore).not.toBeNull();
             expect(updatedStore.name).toBe("test-store");
             expect(updatedStore.email).toBe("test-store-email");
             expect(updatedStore.phone_number).toBe("test-store-phone-number");
             expect(updatedStore.address).toBe("test-store-address");
             expect(updatedStore.location.type).toBe("Point");
-            expect(updatedStore.location.coordinates).toContainEqual(500);
-            expect(updatedStore.location.coordinates).toContainEqual(500);
+            expect(updatedStore.location.coordinates).toContainEqual(20);
+            expect(updatedStore.location.coordinates).toContainEqual(20);
         });
 
     });
