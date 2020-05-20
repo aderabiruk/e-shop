@@ -36,8 +36,9 @@ let StoreSchema = new Schema({
 		required: true
     },
     location: {
-		type: PointSchema,
-		required: true
+        index: true,
+        required: true,
+        type: PointSchema,
     },
 	created_at: {
 		type: Date,
@@ -52,5 +53,7 @@ let StoreSchema = new Schema({
 		default: null
 	}
 }, {collection: 'stories'});
+
+StoreSchema.index({ location: "2dsphere"});
 
 export default model<IStore>('Store', StoreSchema);

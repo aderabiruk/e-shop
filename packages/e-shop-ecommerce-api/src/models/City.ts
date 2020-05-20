@@ -44,6 +44,6 @@ let CitySchema = new Schema({
 	}
 }, {collection: 'cities'});
 
-CitySchema.index({ location: "2dsphere"})
+CitySchema.index({ location: "2dsphere"});
 
 export default model<ICity>('City', CitySchema);
