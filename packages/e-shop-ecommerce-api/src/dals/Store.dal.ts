@@ -41,6 +41,28 @@ class StoreDAL {
     }
 
     /**
+     * Count Stores
+     * 
+     * @param {any}     query 
+     * @param {number}  page 
+     * @param {number}  limit 
+     * 
+     * @returns {Promise<number>}
+     */
+    static count(query: any, page: number = 1, limit: number = 25): Promise<number> {
+        return new Promise((resolve, reject) => {
+            Store.count(query).exec((error, count) => {
+                if (error) {
+                    reject(transform_mongoose_error(error, { capitalize: true, humanize: true }))
+                }
+                else {
+                    resolve(count);
+                }
+            });
+        });
+    }
+
+    /**
      * Find Many Stores
      * 
      * @param {any}     query 
