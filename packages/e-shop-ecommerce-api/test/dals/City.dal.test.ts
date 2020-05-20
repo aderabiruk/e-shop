@@ -47,6 +47,15 @@ describe("Store.dal", () => {
         });
     });
 
+    describe("count", () => {
+        it("Should return number of cities", async () => {
+            await createCity("test-city", "test-city-code", mongoose.Types.ObjectId().toHexString(), LATITUDE, LONGITUDE).save();
+
+            let count: number = await CityDAL.count({});
+            expect(count).toBeGreaterThan(0);
+        });
+    });
+
     describe("findMany", () => {
         it("Should return cities", async () => {
             await createCity("test-city", "test-city-code", mongoose.Types.ObjectId().toHexString(), LATITUDE, LONGITUDE).save();
@@ -55,6 +64,7 @@ describe("Store.dal", () => {
             expect(cities.length).toBeGreaterThan(0);
         });
     });
+
 
     describe("findOne", () => {
         it("Should return null if city doesn't exist", async () => {
