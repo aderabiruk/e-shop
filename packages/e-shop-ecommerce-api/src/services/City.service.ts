@@ -116,6 +116,7 @@ class CityService {
     /**
      * Find All Cities
      * 
+     * @param {string} term
      * @param {number} page
      * @param {number} limit
      * 
@@ -171,7 +172,9 @@ class CityService {
     /**
      * Find Cities By Location
      * 
-     * @param {string} country
+     * @param {number} latitude
+     * @param {number} longitude
+     * @param {number} distance
      * @param {number} page
      * @param {number} limit
      * 
@@ -204,8 +207,7 @@ class CityService {
     /**
      * Find City By ID
      * 
-     * @param {number} page
-     * @param {number} limit
+     * @param {string} id
      * 
      * @returns {Promise<ICity[]>}
      */

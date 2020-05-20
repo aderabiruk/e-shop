@@ -14,6 +14,44 @@ import { IPaginationResponse, PaginationAdapter } from '../utilities/adapters/Pa
 class StoreService {
 
     /**
+     * Filter Stores
+     * 
+     * @param {any}     query
+     * @param {number}  page
+     * @param {number}  limit
+     * 
+     * @returns {Promise<IPaginationResponse[]>}
+     */
+    private static filter(query: any, page: number = 1, limit: number = 25): Promise<IPaginationResponse> {
+        return new Promise((resolve, reject) => {
+            async.waterfall([
+                (done: Function) => {
+                    StoreDAL.count(query)
+                        .then((count) => {
+                            done(null, count);
+                        })
+                        .catch((error) => {
+                            done(new InternalServerError(error));
+                        });
+                },
+                (count: number, done: Function) => {
+                    StoreDAL.findMany(query, page, limit)
+                        .then((stores: IStore[]) => {
+                            resolve(PaginationAdapter(stores, page, limit, count));
+                        })
+                        .catch((error) => {
+                            done(new InternalServerError(error));
+                        });
+                }
+            ], (error: any) => {
+                if (error) {
+                    reject(error);
+                }
+            });
+        });
+    }
+
+    /**
      * Create Store
      * 
      * @param {string} name
@@ -36,9 +74,10 @@ class StoreService {
                         phone_number: evalidate.string().required(Messages.STORE_PHONE_NUMBER_REQUIRED),
                         city: evalidate.string().required(Messages.STORE_CITY_REQUIRED),
                         address: evalidate.string().required(Messages.STORE_ADDRESS_REQUIRED),
-                        latitude: evalidate.number().required(Messages.STORE_LOCATION_REQUIRED),
-                        longitude: evalidate.number().required(Messages.STORE_LOCATION_REQUIRED),
+                        latitude: evalidate.string().required(Messages.STORE_LOCATION_REQUIRED),
+                        longitude: evalidate.string().required(Messages.STORE_LOCATION_REQUIRED),
                     });
+
                     const result = Schema.validate({ name: name, email: email, phone_number: phone_number, city: city, address: address, latitude: latitude, longitude: longitude });
                     if (result.isValid) {
                         done(null);
@@ -81,29 +120,99 @@ class StoreService {
     /**
      * Find All Stores
      * 
+     * @param {string} term
      * @param {number} page
      * @param {number} limit
      * 
      * @returns {Promise<IPaginationResponse[]>}
      */
-    static findAll(page: number = 1, limit: number = 25): Promise<IPaginationResponse> {
+    static findAll(term: string = "", page: number = 1, limit: number = 25): Promise<IPaginationResponse> {
         return new Promise((resolve, reject) => {
-            StoreDAL.findMany({ deleted_at: null }, page, limit)
-                .then((stores: IStore[]) => {
-                    resolve(PaginationAdapter(stores, page, limit));
+            let query: any;
+            if (term) {
+                query = { $or: [ { name: { $regex: new RegExp(term, "i") } }, { email: { $regex: new RegExp(term, "i") } }, { phone_number: { $regex: new RegExp(term, "i") } } ], deleted_at: null }
+            }
+            else {
+                query = { deleted_at: null }
+            }
+
+            StoreService.filter(query, page, limit)
+                .then((result: IPaginationResponse) => {
+                    resolve(result);
                 })
                 .catch((error) => {
-                    reject(new InternalServerError(error));
+                    reject(error);
                 });
 
         });
     }
 
     /**
-     * Find Store By ID
+     * Find Stores By City
      * 
+     * @param {string} city
      * @param {number} page
      * @param {number} limit
+     * 
+     * @returns {Promise<IPaginationResponse[]>}
+     */
+    static findByCity(city: string = "", page: number = 1, limit: number = 25): Promise<IPaginationResponse> {
+        return new Promise((resolve, reject) => {
+            if (mongoose.isValidObjectId(city)) {
+                let query: any = { city: city, deleted_at: null }
+                StoreService.filter(query, page, limit)
+                    .then((result: IPaginationResponse) => {
+                        resolve(result);
+                    })
+                    .catch((error) => {
+                        reject(error);
+                    });
+            }
+            else {
+                resolve(PaginationAdapter([], page, limit, 0));
+            }
+        });
+    }
+
+    /**
+     * Find Stores By Location
+     * 
+     * @param {number} latitude
+     * @param {number} longitude
+     * @param {number} distance
+     * @param {number} page
+     * @param {number} limit
+     * 
+     * @returns {Promise<IPaginationResponse[]>}
+     */
+    static findByLocation(latitude: number, longitude: number, distance: number, page: number = 1, limit: number = 25): Promise<IPaginationResponse> {
+        return new Promise((resolve, reject) => {
+            let query: any = {
+                location: { 
+                    $near: { 
+                        $maxDistance: distance, 
+                        $geometry: { 
+                            type: "Point", 
+                            coordinates: [ longitude, latitude ] 
+                        } 
+                    } 
+                },
+                deleted_at: null 
+            };
+            StoreService.filter(query, page, limit)
+                .then((result: IPaginationResponse) => {
+                    resolve(result);
+                })
+                .catch((error) => {
+                    reject(error);
+                });
+        });
+    }
+
+    /**
+     * Find Store By ID
+     * 
+     * @param {string} id
      * 
      * @returns {Promise<IStore[]>}
      */
