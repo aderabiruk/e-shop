@@ -22,6 +22,8 @@ const Messages = {
     CITY_CODE_REQUIRED: "City code is required!",
     CITY_COUNTRY_REQUIRED: "Country is required!",
     CITY_LOCATION_REQUIRED: "City location is required!",
+    CITY_FILTER_LOCATION_REQUIRED: 'Location is required!',
+    CITY_FILTER_MAX_DISTANCE_REQUREID: "Maximum distance is required!",
 
     /**
      * Country Error Messages
