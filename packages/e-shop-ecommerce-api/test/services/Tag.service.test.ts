@@ -38,12 +38,60 @@ describe("Tag.service", () => {
 
     describe("findAll", () => {
         it("Should return tags", async () => {
-            await createTag("test-tag", "test-tag", "test-tag").save();
+            let tag: ITag = await createTag("test-tag", "test-tag", "test-tag").save();
 
             let response: IPaginationResponse = await TagService.findAll();
             expect(response.data.length).toBeGreaterThan(0);
             expect(response.metadata.pagination.page).toBe(1);
             expect(response.metadata.pagination.limit).toBe(25);
+            expect(response.metadata.pagination.numberOfPages).toBeGreaterThan(0);
+            expect(response.metadata.pagination.numberOfResults).toBeGreaterThan(0);
+
+            expect(response.data).toEqual(expect.arrayContaining([
+                expect.objectContaining({
+                    _id: tag._id,
+                    name: tag.name,
+                    slug: tag.slug
+                })
+            ]));
+        });
+
+        it("Should filter tags", async () => {
+            let tag: ITag = await createTag("test-tag", "test-tag", "test-tag").save();
+
+            let response: IPaginationResponse = await TagService.findAll('tag');
+            expect(response.data.length).toBeGreaterThan(0);
+            expect(response.metadata.pagination.page).toBe(1);
+            expect(response.metadata.pagination.limit).toBe(25);
+            expect(response.metadata.pagination.numberOfPages).toBeGreaterThan(0);
+            expect(response.metadata.pagination.numberOfResults).toBeGreaterThan(0);
+
+            expect(response.data).toEqual(expect.arrayContaining([
+                expect.objectContaining({
+                    _id: tag._id,
+                    name: tag.name,
+                    slug: tag.slug
+                })
+            ]));
+        });
+
+        it("Should paginate result", async () => {
+            let tag: ITag = await createTag("test-tag", "test-tag", "test-tag").save();
+
+            let response: IPaginationResponse = await TagService.findAll("", 1, 5);
+            expect(response.data.length).toBeGreaterThan(0);
+            expect(response.metadata.pagination.page).toBe(1);
+            expect(response.metadata.pagination.limit).toBe(5);
+            expect(response.metadata.pagination.numberOfPages).toBeGreaterThan(0);
+            expect(response.metadata.pagination.numberOfResults).toBeGreaterThan(0);
+
+            expect(response.data).toEqual(expect.arrayContaining([
+                expect.objectContaining({
+                    _id: tag._id,
+                    name: tag.name,
+                    slug: tag.slug
+                })
+            ]));
         });
     });
 
