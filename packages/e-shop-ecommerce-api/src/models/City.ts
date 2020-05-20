@@ -27,7 +27,8 @@ let CitySchema = new Schema({
     },
     location: {
 		type: PointSchema,
-		required: true
+        required: true,
+        index: true
     },
 	created_at: {
 		type: Date,
@@ -42,5 +43,7 @@ let CitySchema = new Schema({
 		default: null
 	}
 }, {collection: 'cities'});
+
+CitySchema.index({ location: "2dsphere"})
 
 export default model<ICity>('City', CitySchema);
