@@ -74,8 +74,8 @@ class StoreService {
                         phone_number: evalidate.string().required(Messages.STORE_PHONE_NUMBER_REQUIRED),
                         city: evalidate.string().required(Messages.STORE_CITY_REQUIRED),
                         address: evalidate.string().required(Messages.STORE_ADDRESS_REQUIRED),
-                        latitude: evalidate.string().required(Messages.STORE_LOCATION_REQUIRED),
-                        longitude: evalidate.string().required(Messages.STORE_LOCATION_REQUIRED),
+                        latitude: evalidate.number().required(Messages.STORE_LOCATION_REQUIRED),
+                        longitude: evalidate.number().required(Messages.STORE_LOCATION_REQUIRED),
                     });
 
                     const result = Schema.validate({ name: name, email: email, phone_number: phone_number, city: city, address: address, latitude: latitude, longitude: longitude });
@@ -156,7 +156,7 @@ class StoreService {
      * 
      * @returns {Promise<IPaginationResponse[]>}
      */
-    static findByCity(city: string = "", page: number = 1, limit: number = 25): Promise<IPaginationResponse> {
+    static findByCity(city: string, page: number = 1, limit: number = 25): Promise<IPaginationResponse> {
         return new Promise((resolve, reject) => {
             if (mongoose.isValidObjectId(city)) {
                 let query: any = { city: city, deleted_at: null }

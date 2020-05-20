@@ -152,7 +152,7 @@ class CityService {
      * 
      * @returns {Promise<IPaginationResponse[]>}
      */
-    static findByCountry(country: string = "", page: number = 1, limit: number = 25): Promise<IPaginationResponse> {
+    static findByCountry(country: string, page: number = 1, limit: number = 25): Promise<IPaginationResponse> {
         return new Promise((resolve, reject) => {
             if (mongoose.isValidObjectId(country)) {
                 let query: any = { country: country, deleted_at: null }
