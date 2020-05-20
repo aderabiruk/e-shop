@@ -32,6 +32,15 @@ describe("Tag.dal", () => {
         });
     });
 
+    describe("count", () => {
+        it("Should return categories", async () => {
+            await createTag("test-tag", "test-tag", "test-tag").save();
+
+            let count: number = await TagDAL.count({});
+            expect(count).toBeGreaterThan(0);
+        });
+    });
+
     describe("findMany", () => {
         it("Should return categories", async () => {
             await createTag("test-tag", "test-tag", "test-tag").save();
