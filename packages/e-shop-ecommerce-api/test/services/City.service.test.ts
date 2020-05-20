@@ -9,8 +9,8 @@ import { IPaginationResponse } from '../../src/utilities/adapters/Pagination';
 
 const app = require("../../src/app");
 
-const LATITUDE = 125;
-const LONGITUDE = 99;
+const LATITUDE = 8;
+const LONGITUDE = 125;
 
 describe("City.service", () => {
     let country: ICountry;
@@ -76,6 +76,21 @@ describe("City.service", () => {
             }
         });
 
+        it("Should return error if location is invalid", async () => {
+            try {
+                await CityService.create("test-city", "test-city-code", country._id.toHexString(), parseFloat("INVALID"), parseFloat("INVALID"));
+                fail();
+            }
+            catch (error) {
+                expect(error.statusCode).toBe(400);
+                expect(error.payload.errors).toEqual(expect.arrayContaining([
+                    expect.objectContaining({
+                        field: "location.coordinates",
+                    })
+                ]));
+            }
+        });
+
         it("Should create city if no errors!", async () => {
             let city = await CityService.create("test-city", "test-city-code", country._id.toHexString(), LATITUDE, LONGITUDE);
             
@@ -89,12 +104,170 @@ describe("City.service", () => {
 
     describe("findAll", () => {
         it("Should return cities", async () => {
-            await createCity("test-city", "test-city-code", mongoose.Types.ObjectId().toHexString(), LATITUDE, LONGITUDE).save();
+            let city: ICity = await createCity("test-city", "test-city-code", mongoose.Types.ObjectId().toHexString(), LATITUDE, LONGITUDE).save();
 
             let response: IPaginationResponse = await CityService.findAll();
             expect(response.data.length).toBeGreaterThan(0);
             expect(response.metadata.pagination.page).toBe(1);
             expect(response.metadata.pagination.limit).toBe(25);
+            expect(response.metadata.pagination.numberOfPages).toBeGreaterThan(0);
+            expect(response.metadata.pagination.numberOfResults).toBeGreaterThan(0);
+
+            expect(response.data).toEqual(expect.arrayContaining([
+                expect.objectContaining({
+                    _id: city._id,
+                    name: city.name,
+                })
+            ]));
+        });
+
+        it("Should filter cities", async () => {
+            let city: ICity = await createCity("test-city", "test-city-code", mongoose.Types.ObjectId().toHexString(), LATITUDE, LONGITUDE).save();
+
+            let response: IPaginationResponse = await CityService.findAll("test");
+            expect(response.data.length).toBeGreaterThan(0);
+            expect(response.metadata.pagination.page).toBe(1);
+            expect(response.metadata.pagination.limit).toBe(25);
+            expect(response.metadata.pagination.numberOfPages).toBeGreaterThan(0);
+            expect(response.metadata.pagination.numberOfResults).toBeGreaterThan(0);
+
+            expect(response.data).toEqual(expect.arrayContaining([
+                expect.objectContaining({
+                    _id: city._id,
+                    name: city.name,
+                })
+            ]));
+        });
+
+        it("Should paginate results", async () => {
+            let city: ICity = await createCity("test-city", "test-city-code", mongoose.Types.ObjectId().toHexString(), LATITUDE, LONGITUDE).save();
+
+            let response: IPaginationResponse = await CityService.findAll("", 1, 5);
+            expect(response.data.length).toBeGreaterThan(0);
+            expect(response.metadata.pagination.page).toBe(1);
+            expect(response.metadata.pagination.limit).toBe(5);
+            expect(response.metadata.pagination.numberOfPages).toBeGreaterThan(0);
+            expect(response.metadata.pagination.numberOfResults).toBeGreaterThan(0);
+
+            expect(response.data).toEqual(expect.arrayContaining([
+                expect.objectContaining({
+                    _id: city._id,
+                    name: city.name,
+                })
+            ]));
+        });
+    });
+
+    describe("findByCountry", () => {
+        it("Should return empty cities if country id is invaid", async () => {
+            let city: ICity = await createCity("test-city", "test-city-code", mongoose.Types.ObjectId().toHexString(), LATITUDE, LONGITUDE).save();
+
+            let response: IPaginationResponse = await CityService.findByCountry("INVALID");
+            expect(response.data.length).toBe(0);
+            expect(response.metadata.pagination.page).toBe(1);
+            expect(response.metadata.pagination.limit).toBe(25);
+            expect(response.metadata.pagination.numberOfPages).toBe(0);
+            expect(response.metadata.pagination.numberOfResults).toBe(0);
+        });
+
+        it("Should return empty cities if country doens't exist", async () => {
+            let city: ICity = await createCity("test-city", "test-city-code", mongoose.Types.ObjectId().toHexString(), LATITUDE, LONGITUDE).save();
+
+            let response: IPaginationResponse = await CityService.findByCountry(mongoose.Types.ObjectId().toHexString());
+            expect(response.data.length).toBe(0);
+            expect(response.metadata.pagination.page).toBe(1);
+            expect(response.metadata.pagination.limit).toBe(25);
+            expect(response.metadata.pagination.numberOfPages).toBe(0);
+            expect(response.metadata.pagination.numberOfResults).toBe(0);
+        });
+
+        it("Should return cities that match", async () => {
+            let countrID = mongoose.Types.ObjectId().toHexString();
+            let city: ICity = await createCity("test-city", "test-city-code", countrID, LATITUDE, LONGITUDE).save();
+
+            let response: IPaginationResponse = await CityService.findByCountry(countrID);
+            expect(response.data.length).toBe(1);
+            expect(response.metadata.pagination.page).toBe(1);
+            expect(response.metadata.pagination.limit).toBe(25);
+            expect(response.metadata.pagination.numberOfPages).toBeGreaterThan(0);
+            expect(response.metadata.pagination.numberOfResults).toBeGreaterThan(0);
+
+            expect(response.data).toEqual(expect.arrayContaining([
+                expect.objectContaining({
+                    _id: city._id,
+                    name: city.name,
+                })
+            ]));
+        });
+
+        it("Should paginate results", async () => {
+            let countrID = mongoose.Types.ObjectId().toHexString();
+            let city: ICity = await createCity("test-city", "test-city-code", countrID, LATITUDE, LONGITUDE).save();
+
+            let response: IPaginationResponse = await CityService.findByCountry(countrID, 1, 5);
+            expect(response.data.length).toBe(1);
+            expect(response.metadata.pagination.page).toBe(1);
+            expect(response.metadata.pagination.limit).toBe(5);
+            expect(response.metadata.pagination.numberOfPages).toBeGreaterThan(0);
+            expect(response.metadata.pagination.numberOfResults).toBeGreaterThan(0);
+
+            expect(response.data).toEqual(expect.arrayContaining([
+                expect.objectContaining({
+                    _id: city._id,
+                    name: city.name,
+                })
+            ]));
+        });
+    });
+
+    describe("findByLocation", () => {
+        it("Should return empty if no cities in radius", async () => {
+            let city: ICity = await createCity("test-city", "test-city-code", mongoose.Types.ObjectId().toHexString(), LATITUDE, LONGITUDE).save();
+
+            let response: IPaginationResponse = await CityService.findByLocation(LATITUDE + 1, LONGITUDE + 1, 10);
+            expect(response.data.length).toBe(0);
+            expect(response.metadata.pagination.page).toBe(1);
+            expect(response.metadata.pagination.limit).toBe(25);
+            expect(response.metadata.pagination.numberOfPages).toBe(0);
+            expect(response.metadata.pagination.numberOfResults).toBe(0);
+        });
+
+        it("Should return cities that are in radius", async () => {
+            let countrID = mongoose.Types.ObjectId().toHexString();
+            let city: ICity = await createCity("test-city", "test-city-code", countrID, LATITUDE, LONGITUDE).save();
+
+            let response: IPaginationResponse = await CityService.findByLocation(LATITUDE, LONGITUDE, 10);
+            expect(response.data.length).toBe(1);
+            expect(response.metadata.pagination.page).toBe(1);
+            expect(response.metadata.pagination.limit).toBe(25);
+            expect(response.metadata.pagination.numberOfPages).toBeGreaterThan(0);
+            expect(response.metadata.pagination.numberOfResults).toBeGreaterThan(0);
+
+            expect(response.data).toEqual(expect.arrayContaining([
+                expect.objectContaining({
+                    _id: city._id,
+                    name: city.name,
+                })
+            ]));
+        });
+
+        it("Should paginate results", async () => {
+            let countrID = mongoose.Types.ObjectId().toHexString();
+            let city: ICity = await createCity("test-city", "test-city-code", countrID, LATITUDE, LONGITUDE).save();
+
+            let response: IPaginationResponse = await CityService.findByLocation(LATITUDE, LONGITUDE, 10, 1, 5);
+            expect(response.data.length).toBe(1);
+            expect(response.metadata.pagination.page).toBe(1);
+            expect(response.metadata.pagination.limit).toBe(5);
+            expect(response.metadata.pagination.numberOfPages).toBeGreaterThan(0);
+            expect(response.metadata.pagination.numberOfResults).toBeGreaterThan(0);
+
+            expect(response.data).toEqual(expect.arrayContaining([
+                expect.objectContaining({
+                    _id: city._id,
+                    name: city.name,
+                })
+            ]));
         });
     });
 
@@ -190,12 +363,12 @@ describe("City.service", () => {
         it("Should update location if both latitude and longitude are provided", async () => {
             let city: ICity = await createCity("test-city", "test-city-code", mongoose.Types.ObjectId().toHexString(), LATITUDE, LONGITUDE).save();
 
-            let updatedCity: ICity = await CityService.update(city._id, { latitude: 500, longitude: 500 });
+            let updatedCity: ICity = await CityService.update(city._id, { latitude: 50, longitude: 50 });
             expect(updatedCity.name).toBe("test-city");
             expect(updatedCity.code).toBe("test-city-code");
             expect(updatedCity.location.type).toBe("Point");
-            expect(updatedCity.location.coordinates).toContainEqual(500);
-            expect(updatedCity.location.coordinates).toContainEqual(500);
+            expect(updatedCity.location.coordinates).toContainEqual(50);
+            expect(updatedCity.location.coordinates).toContainEqual(50);
         });
 
     });

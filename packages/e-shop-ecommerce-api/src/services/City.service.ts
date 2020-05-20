@@ -71,9 +71,10 @@ class CityService {
                         name: evalidate.string().required(Messages.CITY_NAME_REQUIRED),
                         code: evalidate.string().required(Messages.CITY_CODE_REQUIRED),
                         country: evalidate.string().required(Messages.CITY_COUNTRY_REQUIRED),
-                        latitude: evalidate.string().required(Messages.CITY_LOCATION_REQUIRED),
-                        longitude: evalidate.string().required(Messages.CITY_LOCATION_REQUIRED),
+                        latitude: evalidate.number().required(Messages.CITY_LOCATION_REQUIRED),
+                        longitude: evalidate.number().required(Messages.CITY_LOCATION_REQUIRED),
                     });
+
                     const result = Schema.validate({ name: name, code: code, country: country, latitude: latitude, longitude: longitude });
                     if (result.isValid) {
                         done(null);
