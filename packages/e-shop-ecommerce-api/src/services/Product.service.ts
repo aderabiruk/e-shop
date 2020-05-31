@@ -1,7 +1,6 @@
 import voca from 'voca';
 import async from 'async';
 import mongoose from 'mongoose';
-import evalidate from 'evalidate';
 
 import { IStore } from '../models/Store';
 import { IProduct } from '../models/Product';
@@ -296,6 +295,12 @@ class ProductService {
                     }
                 },
                 (product: IProduct, category: ICategory, store: IStore, done: Function) => {
+                    if (payload && payload.name) {
+                        payload = {
+                            ...payload,
+                            slug: voca.slugify(payload.name)
+                        };
+                    }
                     ProductDAL.update(product, payload)
                         .then((updatedProduct: IProduct) => {
                             resolve(updatedProduct);
