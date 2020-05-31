@@ -20,8 +20,7 @@ describe("Category.service", () => {
                 expect(error.statusCode).toBe(400);
                 expect(error.payload.errors).toEqual(expect.arrayContaining([
                     expect.objectContaining({
-                        field: "name",
-                        message: Messages.CATEGORY_NAME_REQUIRED
+                        field: "name"
                     })
                 ]));
             }

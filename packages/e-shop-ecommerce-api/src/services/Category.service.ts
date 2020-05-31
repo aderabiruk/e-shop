@@ -63,18 +63,6 @@ class CategoryService {
         return new Promise((resolve, reject) => {
             async.waterfall([
                 (done: Function) => {
-                    const Schema = new evalidate.schema({
-                        name: evalidate.string().required(Messages.CATEGORY_NAME_REQUIRED)
-                    });
-                    const result = Schema.validate({ name: name, image_url: image_url });
-                    if (result.isValid) {
-                        done(null);
-                    }
-                    else {
-                        done(new BadRequestError(result.errors));
-                    }
-                },
-                (done: Function) => {
                     if (parent) {
                         CategoryDAL.findOne({ _id: parent})
                             .then((category: ICategory) => {
@@ -90,7 +78,7 @@ class CategoryService {
                             });
                     }
                     else {
-                        done(null);
+                        done(null, null);
                     }
                 },
                 (category: ICategory, done: Function) => {
@@ -116,6 +104,7 @@ class CategoryService {
     /**
      * Find All Categories
      * 
+     * @param {string} term
      * @param {number} page
      * @param {number} limit
      * 

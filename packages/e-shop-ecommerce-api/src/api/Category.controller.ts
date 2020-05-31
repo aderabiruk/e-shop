@@ -1,3 +1,4 @@
+import evalidate from 'evalidate';
 import validator from 'validator';
 import { Request, Response } from 'express';
 
@@ -5,7 +6,7 @@ import Messages from '../errors/Messages';
 import { ICategory } from '../models/Category';
 import CategoryService from '../services/Category.service';
 import { IPaginationResponse } from '../utilities/adapters/Pagination';
-import { Error, NotFoundError, NotImplementedError } from '../errors/Errors';
+import { Error, BadRequestError, NotFoundError, NotImplementedError } from '../errors/Errors';
 
 class CategoryController {
 
@@ -16,13 +17,25 @@ class CategoryController {
      * @param {Response} response 
      */
     static create(request: Request, response: Response) {
-        CategoryService.create(request.body.name, request.body.parent, request.body.image_url, request.body.description)
-            .then((category: ICategory) => {
-                response.json(category);
-            })
-            .catch((error: Error) => {
-                response.status(error.statusCode).json(error.payload);
-            });
+        const Schema = new evalidate.schema({
+            name: evalidate.string().required(Messages.CATEGORY_NAME_REQUIRED)
+        });
+        const result = Schema.validate(request.body);
+        if (result.isValid) {
+            CategoryService.create(request.body.name, request.body.parent, request.body.image_url, request.body.description)
+                .then((category: ICategory) => {
+                    response.json(category);
+                })
+                .catch((error: Error) => {
+                    response.status(error.statusCode).json(error.payload);
+                });
+        }
+        else {
+            let error = new BadRequestError(result.errors);
+            response.status(error.statusCode).json(error.payload);
+        }
+
+        
     }
 
     /**
