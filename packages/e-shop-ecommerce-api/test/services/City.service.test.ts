@@ -22,39 +22,19 @@ describe("City.service", () => {
     describe("create", () => {
         it("Should return validation error if required fields are not provided", async () => {
             try {
-                await CityService.create(null, null, null, null ,null);
+                await CityService.create(null, null, country._id, 0 , 0);
                 fail();
             }
             catch (error) {
                 expect(error.statusCode).toBe(400);
                 expect(error.payload.errors).toEqual(expect.arrayContaining([
                     expect.objectContaining({
-                        field: "name",
-                        message: Messages.CITY_NAME_REQUIRED
+                        field: "name"
                     })
                 ]));
                 expect(error.payload.errors).toEqual(expect.arrayContaining([
                     expect.objectContaining({
-                        field: "code",
-                        message: Messages.CITY_CODE_REQUIRED
-                    })
-                ]));
-                expect(error.payload.errors).toEqual(expect.arrayContaining([
-                    expect.objectContaining({
-                        field: "country",
-                        message: Messages.CITY_COUNTRY_REQUIRED
-                    })
-                ]));
-                expect(error.payload.errors).toEqual(expect.arrayContaining([
-                    expect.objectContaining({
-                        field: "latitude",
-                        message: Messages.CITY_LOCATION_REQUIRED
-                    })
-                ]));
-                expect(error.payload.errors).toEqual(expect.arrayContaining([
-                    expect.objectContaining({
-                        field: "longitude",
-                        message: Messages.CITY_LOCATION_REQUIRED
+                        field: "code"
                     })
                 ]));
             }

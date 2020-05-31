@@ -17,13 +17,30 @@ class CityController {
      * @param {Response} response 
      */
     static create(request: Request, response: Response) {
-        CityService.create(request.body.name, request.body.code, request.body.country, request.body.latitude, request.body.longitude)
-            .then((city: ICity) => {
-                response.json(city);
-            })
-            .catch((error: Error) => {
-                response.status(error.statusCode).json(error.payload);
-            });
+        const Schema = new evalidate.schema({
+            name: evalidate.string().required(Messages.CITY_NAME_REQUIRED),
+            code: evalidate.string().required(Messages.CITY_CODE_REQUIRED),
+            country: evalidate.string().required(Messages.CITY_COUNTRY_REQUIRED),
+            latitude: evalidate.string().numeric().required(Messages.CITY_LOCATION_REQUIRED),
+            longitude: evalidate.string().numeric().required(Messages.CITY_LOCATION_REQUIRED),
+        });
+
+        const result = Schema.validate(request.body);
+        if (result.isValid) {
+            CityService.create(request.body.name, request.body.code, request.body.country, request.body.latitude, request.body.longitude)
+                .then((city: ICity) => {
+                    response.json(city);
+                })
+                .catch((error: Error) => {
+                    response.status(error.statusCode).json(error.payload);
+                });
+        }
+        else {
+            let error = new BadRequestError(result.errors);
+            response.status(error.statusCode).json(error.payload);
+        }
+
+        
     }
 
     /**

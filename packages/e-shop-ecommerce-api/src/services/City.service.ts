@@ -1,6 +1,6 @@
 import async from 'async';
 import mongoose from 'mongoose';
-import evalidate from 'evalidate';
+
 
 import { ICity } from '../models/City';
 import CityDAL from '../dals/City.dal';
@@ -66,23 +66,6 @@ class CityService {
     static create(name: string, code: string, country: string, latitude: number, longitude: number): Promise<ICity> {
         return new Promise((resolve, reject) => {
             async.waterfall([
-                (done: Function) => {
-                    const Schema = new evalidate.schema({
-                        name: evalidate.string().required(Messages.CITY_NAME_REQUIRED),
-                        code: evalidate.string().required(Messages.CITY_CODE_REQUIRED),
-                        country: evalidate.string().required(Messages.CITY_COUNTRY_REQUIRED),
-                        latitude: evalidate.number().required(Messages.CITY_LOCATION_REQUIRED),
-                        longitude: evalidate.number().required(Messages.CITY_LOCATION_REQUIRED),
-                    });
-
-                    const result = Schema.validate({ name: name, code: code, country: country, latitude: latitude, longitude: longitude });
-                    if (result.isValid) {
-                        done(null);
-                    }
-                    else {
-                        done(new BadRequestError(result.errors));
-                    }
-                },
                 (done: Function) => {
                     CountryService.findByID(country)
                         .then((country: ICountry) => {
