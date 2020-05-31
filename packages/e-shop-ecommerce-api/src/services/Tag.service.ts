@@ -1,7 +1,6 @@
 import voca from 'voca';
 import async from 'async';
 import mongoose from 'mongoose';
-import evalidate from 'evalidate';
 
 import Tag, { ITag } from '../models/Tag';
 import TagDAL from '../dals/Tag.dal';
@@ -61,18 +60,6 @@ class TagService {
     static create(name: string, description: string): Promise<ITag> {
         return new Promise((resolve, reject) => {
             async.waterfall([
-                (done: Function) => {
-                    const Schema = new evalidate.schema({
-                        name: evalidate.string().required(Messages.TAG_NAME_REQUIRED)
-                    });
-                    const result = Schema.validate({ name: name });
-                    if (result.isValid) {
-                        done(null);
-                    }
-                    else {
-                        done(new BadRequestError(result.errors));
-                    }
-                },
                 (done: Function) => {
                     let slug = voca.slugify(name);
                     TagDAL.create(name, slug, description)

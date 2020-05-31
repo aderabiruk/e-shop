@@ -1,3 +1,4 @@
+import evalidate from 'evalidate';
 import validator from 'validator';
 import { Request, Response } from 'express';
 
@@ -16,13 +17,25 @@ class TagController {
      * @param {Response} response 
      */
     static create(request: Request, response: Response) {
-        TagService.create(request.body.name, request.body.description)
-            .then((tag: ITag) => {
-                response.json(tag);
-            })
-            .catch((error: Error) => {
-                response.status(error.statusCode).json(error.payload);
-            });
+        const Schema = new evalidate.schema({
+            name: evalidate.string().required(Messages.TAG_NAME_REQUIRED)
+        });
+        const result = Schema.validate(request.body);
+        if (result.isValid) {
+            TagService.create(request.body.name, request.body.description)
+                .then((tag: ITag) => {
+                    response.json(tag);
+                })
+                .catch((error: Error) => {
+                    response.status(error.statusCode).json(error.payload);
+                });
+        }
+        else {
+            let error = new BadRequestError(result.errors);
+            response.status(error.statusCode).json(error.payload);
+        }
+
+        
     }
 
     /**
