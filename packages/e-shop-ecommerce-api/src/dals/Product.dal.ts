@@ -58,6 +58,26 @@ class ProductDAL {
     }
 
     /**
+     * Count Products
+     * 
+     * @param {any}     query  
+     * 
+     * @returns {Promise<number>}
+     */
+    static count(query: any): Promise<number> {
+        return new Promise((resolve, reject) => {
+            Product.count(query).exec((error, count) => {
+                if (error) {
+                    reject(transform_mongoose_error(error, { capitalize: true, humanize: true }))
+                }
+                else {
+                    resolve(count);
+                }
+            });
+        });
+    }
+
+    /**
      * Find Many Products
      * 
      * @param {any}     query 

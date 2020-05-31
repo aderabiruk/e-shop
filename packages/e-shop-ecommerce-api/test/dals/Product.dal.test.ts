@@ -59,14 +59,14 @@ describe("Product DAL", () => {
         });
 
         it("Should create store if no errors", async () => {
-            let product = await ProductDAL.create("test-product", "test-product", 100, 100, "test-product-description", [mongoose.Types.ObjectId().toHexString()], mongoose.Types.ObjectId().toHexString(), mongoose.Types.ObjectId().toHexString(), [mongoose.Types.ObjectId().toHexString()], 250, 10, 10, 10, true, false);
+            let product = await ProductDAL.create("test-product", "test-product", 100, 100, "test-product-description", [], mongoose.Types.ObjectId().toHexString(), mongoose.Types.ObjectId().toHexString(), [mongoose.Types.ObjectId().toHexString()], 250, 10, 10, 10, true, false);
             
             expect(product.name).toBe("test-product");
             expect(product.slug).toBe("test-product");
             expect(product.price).toBe(100);
             expect(product.quantity).toBe(100);
             expect(product.description).toBe("test-product-description");
-            expect(product.image_urls.length).toBe(1);
+            expect(product.image_urls.length).toBe(0);
             expect(product.store).toBeTruthy();
             expect(product.category).toBeTruthy();
             expect(product.tags.length).toBe(1);
@@ -79,16 +79,25 @@ describe("Product DAL", () => {
         });
     });
 
+    describe("count", () => {
+        it("Should return number of products", async () => {
+            await createProduct("test-product", "test-product", 100, 100, "test-product-description", [], mongoose.Types.ObjectId().toHexString(), mongoose.Types.ObjectId().toHexString(), [mongoose.Types.ObjectId().toHexString()], 250, 10, 10, 10, true, false).save();
+
+            let count: number = await ProductDAL.count({});
+            expect(count).toBeGreaterThan(0);
+        });
+    });
+
     describe("findMany", () => {
         it("Should return products", async () => {
-            await createProduct("test-product", "test-product", 100, 100, "test-product-description", ["image-url"], mongoose.Types.ObjectId().toHexString(), mongoose.Types.ObjectId().toHexString(), [mongoose.Types.ObjectId().toHexString()], 250, 10, 10, 10, true, false).save();
+            await createProduct("test-product", "test-product", 100, 100, "test-product-description", [], mongoose.Types.ObjectId().toHexString(), mongoose.Types.ObjectId().toHexString(), [mongoose.Types.ObjectId().toHexString()], 250, 10, 10, 10, true, false).save();
 
             let products: IProduct[] = await ProductDAL.findMany({});
             expect(products.length).toBeGreaterThan(0);
         });
 
         it("Should filter products by category (Empty Response)", async () => {
-            await createProduct("test-product", "test-product", 100, 100, "test-product-description", ["image-url"], mongoose.Types.ObjectId().toHexString(), mongoose.Types.ObjectId().toHexString(), [mongoose.Types.ObjectId().toHexString()], 250, 10, 10, 10, true, false).save();
+            await createProduct("test-product", "test-product", 100, 100, "test-product-description", [], mongoose.Types.ObjectId().toHexString(), mongoose.Types.ObjectId().toHexString(), [mongoose.Types.ObjectId().toHexString()], 250, 10, 10, 10, true, false).save();
 
             let products: IProduct[] = await ProductDAL.findMany({category: mongoose.Types.ObjectId()});
             expect(products.length).toBe(0);
@@ -96,14 +105,14 @@ describe("Product DAL", () => {
 
         it("Should filter products by category (With Response)", async () => {
             let category = mongoose.Types.ObjectId();
-            await createProduct("test-product", "test-product", 100, 100, "test-product-description", ["image-url"], category.toHexString(), mongoose.Types.ObjectId().toHexString(), [mongoose.Types.ObjectId().toHexString()], 250, 10, 10, 10, true, false).save();
+            await createProduct("test-product", "test-product", 100, 100, "test-product-description", [], category.toHexString(), mongoose.Types.ObjectId().toHexString(), [mongoose.Types.ObjectId().toHexString()], 250, 10, 10, 10, true, false).save();
 
             let products: IProduct[] = await ProductDAL.findMany({ category: category.toHexString() });
             expect(products.length).toBe(1);
         });
 
         it("Should filter products by store (Empty Response)", async () => {
-            await createProduct("test-product", "test-product", 100, 100, "test-product-description", ["image-url"], mongoose.Types.ObjectId().toHexString(), mongoose.Types.ObjectId().toHexString(), [mongoose.Types.ObjectId().toHexString()], 250, 10, 10, 10, true, false).save();
+            await createProduct("test-product", "test-product", 100, 100, "test-product-description", [], mongoose.Types.ObjectId().toHexString(), mongoose.Types.ObjectId().toHexString(), [mongoose.Types.ObjectId().toHexString()], 250, 10, 10, 10, true, false).save();
 
             let products: IProduct[] = await ProductDAL.findMany({store: mongoose.Types.ObjectId()});
             expect(products.length).toBe(0);
@@ -111,7 +120,7 @@ describe("Product DAL", () => {
 
         it("Should filter products by store (With Response)", async () => {
             let store = mongoose.Types.ObjectId();
-            await createProduct("test-product", "test-product", 100, 100, "test-product-description", ["image-url"], mongoose.Types.ObjectId().toHexString(), store.toHexString(), [mongoose.Types.ObjectId().toHexString()], 250, 10, 10, 10, true, false).save();
+            await createProduct("test-product", "test-product", 100, 100, "test-product-description", [], mongoose.Types.ObjectId().toHexString(), store.toHexString(), [mongoose.Types.ObjectId().toHexString()], 250, 10, 10, 10, true, false).save();
 
             let products: IProduct[] = await ProductDAL.findMany({ store: store.toHexString() });
             expect(products.length).toBe(1);
@@ -125,7 +134,7 @@ describe("Product DAL", () => {
         });
 
         it("Should return product if it exists", async () => {
-            let product = await createProduct("test-product", "test-product", 100, 100, "test-product-description", ["image-url"], mongoose.Types.ObjectId().toHexString(), mongoose.Types.ObjectId().toHexString(), [mongoose.Types.ObjectId().toHexString()], 250, 10, 10, 10, true, false).save();
+            let product = await createProduct("test-product", "test-product", 100, 100, "test-product-description", [], mongoose.Types.ObjectId().toHexString(), mongoose.Types.ObjectId().toHexString(), [mongoose.Types.ObjectId().toHexString()], 250, 10, 10, 10, true, false).save();
             
             let fetchedProduct: IProduct = await ProductDAL.findOne({ _id: product._id });
             expect(fetchedProduct.name).toBe("test-product");
@@ -133,7 +142,7 @@ describe("Product DAL", () => {
             expect(fetchedProduct.price).toBe(100);
             expect(fetchedProduct.quantity).toBe(100);
             expect(fetchedProduct.description).toBe("test-product-description");
-            expect(fetchedProduct.image_urls.length).toBe(1);
+            expect(fetchedProduct.image_urls.length).toBe(0);
             expect(fetchedProduct.store).toBeTruthy();
             expect(fetchedProduct.category).toBeTruthy();
             expect(fetchedProduct.tags.length).toBe(1);
@@ -153,7 +162,7 @@ describe("Product DAL", () => {
         });
 
         it("Shouldn't update if payload is empty", async () => {
-            let product = await createProduct("test-product", "test-product", 100, 100, "test-product-description", ["image-url"], mongoose.Types.ObjectId().toHexString(), mongoose.Types.ObjectId().toHexString(), [mongoose.Types.ObjectId().toHexString()], 250, 10, 10, 10, true, false).save();
+            let product = await createProduct("test-product", "test-product", 100, 100, "test-product-description", [], mongoose.Types.ObjectId().toHexString(), mongoose.Types.ObjectId().toHexString(), [mongoose.Types.ObjectId().toHexString()], 250, 10, 10, 10, true, false).save();
             
             let updateProduct: IProduct = await ProductDAL.update(product, {  });
             expect(updateProduct.name).toBe("test-product");
@@ -161,7 +170,7 @@ describe("Product DAL", () => {
             expect(updateProduct.price).toBe(100);
             expect(updateProduct.quantity).toBe(100);
             expect(updateProduct.description).toBe("test-product-description");
-            expect(updateProduct.image_urls.length).toBe(1);
+            expect(updateProduct.image_urls.length).toBe(0);
             expect(updateProduct.store).toBeTruthy();
             expect(updateProduct.category).toBeTruthy();
             expect(updateProduct.tags.length).toBe(1);
@@ -174,7 +183,7 @@ describe("Product DAL", () => {
         });
 
         it("Should update product", async () => {
-            let product = await createProduct("test-product", "test-product", 100, 100, "test-product-description", ["image-url"], mongoose.Types.ObjectId().toHexString(), mongoose.Types.ObjectId().toHexString(), [mongoose.Types.ObjectId().toHexString()], 250, 10, 10, 10, true, false).save();
+            let product = await createProduct("test-product", "test-product", 100, 100, "test-product-description", [], mongoose.Types.ObjectId().toHexString(), mongoose.Types.ObjectId().toHexString(), [mongoose.Types.ObjectId().toHexString()], 250, 10, 10, 10, true, false).save();
             
             let updateProduct: IProduct = await ProductDAL.update(product, { description: "test-product-description-new", weight: 400, width: 20, image_urls: [] });
             expect(updateProduct.name).toBe("test-product");
@@ -202,7 +211,7 @@ describe("Product DAL", () => {
         });
 
         it("Should delete product if it exists", async () => {
-            let product = await createProduct("test-product", "test-product", 100, 100, "test-product-description", ["image-url"], mongoose.Types.ObjectId().toHexString(), mongoose.Types.ObjectId().toHexString(), [mongoose.Types.ObjectId().toHexString()], 250, 10, 10, 10, true, false).save();
+            let product = await createProduct("test-product", "test-product", 100, 100, "test-product-description", [], mongoose.Types.ObjectId().toHexString(), mongoose.Types.ObjectId().toHexString(), [mongoose.Types.ObjectId().toHexString()], 250, 10, 10, 10, true, false).save();
 
             let result: any = await ProductDAL.deleteHard({ _id: product._id.toHexString() });
             expect(result.deletedCount).toBe(1);
@@ -216,7 +225,7 @@ describe("Product DAL", () => {
         });
 
         it("Should soft delete product if it exists", async () => {
-            let product = await createProduct("test-product", "test-product", 100, 100, "test-product-description", ["image-url"], mongoose.Types.ObjectId().toHexString(), mongoose.Types.ObjectId().toHexString(), [mongoose.Types.ObjectId().toHexString()], 250, 10, 10, 10, true, false).save();
+            let product = await createProduct("test-product", "test-product", 100, 100, "test-product-description", [], mongoose.Types.ObjectId().toHexString(), mongoose.Types.ObjectId().toHexString(), [mongoose.Types.ObjectId().toHexString()], 250, 10, 10, 10, true, false).save();
 
             let deletedStore: IProduct = await ProductDAL.deleteSoft(product);
             expect(deletedStore).not.toBeNull();
