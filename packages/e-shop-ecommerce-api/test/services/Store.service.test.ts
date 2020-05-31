@@ -22,45 +22,29 @@ describe("Store.service", () => {
     describe("create", () => {
         it("Should return validation error if required fields are not provided", async () => {
             try {
-                await StoreService.create(null, null, null, null ,null, null, null);
+                await StoreService.create(null, null, null, city._id ,null, null, null);
                 fail();
             }
             catch (error) {
                 expect(error.statusCode).toBe(400);
                 expect(error.payload.errors).toEqual(expect.arrayContaining([
                     expect.objectContaining({
-                        field: "name",
-                        message: Messages.STORE_NAME_REQUIRED
+                        field: "name"
                     })
                 ]));
                 expect(error.payload.errors).toEqual(expect.arrayContaining([
                     expect.objectContaining({
-                        field: "email",
-                        message: Messages.STORE_EMAIL_REQUIRED
+                        field: "email"
                     })
                 ]));
                 expect(error.payload.errors).toEqual(expect.arrayContaining([
                     expect.objectContaining({
-                        field: "phone_number",
-                        message: Messages.STORE_PHONE_NUMBER_REQUIRED
+                        field: "phone_number"
                     })
                 ]));
                 expect(error.payload.errors).toEqual(expect.arrayContaining([
                     expect.objectContaining({
-                        field: "city",
-                        message: Messages.STORE_CITY_REQUIRED
-                    })
-                ]));
-                expect(error.payload.errors).toEqual(expect.arrayContaining([
-                    expect.objectContaining({
-                        field: "latitude",
-                        message: Messages.STORE_LOCATION_REQUIRED
-                    })
-                ]));
-                expect(error.payload.errors).toEqual(expect.arrayContaining([
-                    expect.objectContaining({
-                        field: "longitude",
-                        message: Messages.STORE_LOCATION_REQUIRED
+                        field: "address"
                     })
                 ]));
             }

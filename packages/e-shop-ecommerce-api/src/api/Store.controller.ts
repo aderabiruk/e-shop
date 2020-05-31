@@ -17,13 +17,30 @@ class StoreController {
      * @param {Response} response 
      */
     static create(request: Request, response: Response) {
-        StoreService.create(request.body.name, request.body.email, request.body.phone_number, request.body.city, request.body.address, request.body.latitude, request.body.longitude)
-            .then((city: IStore) => {
-                response.json(city);
-            })
-            .catch((error: Error) => {
-                response.status(error.statusCode).json(error.payload);
-            });
+        const Schema = new evalidate.schema({
+            name: evalidate.string().required(Messages.STORE_NAME_REQUIRED),
+            email: evalidate.string().email().required(Messages.STORE_EMAIL_REQUIRED),
+            phone_number: evalidate.string().required(Messages.STORE_PHONE_NUMBER_REQUIRED),
+            city: evalidate.string().required(Messages.STORE_CITY_REQUIRED),
+            address: evalidate.string().required(Messages.STORE_ADDRESS_REQUIRED),
+            latitude: evalidate.string().numeric().required(Messages.STORE_LOCATION_REQUIRED),
+            longitude: evalidate.string().numeric().required(Messages.STORE_LOCATION_REQUIRED),
+        });
+
+        const result = Schema.validate(request.body);
+        if (result.isValid) {
+            StoreService.create(request.body.name, request.body.email, request.body.phone_number, request.body.city, request.body.address, request.body.latitude, request.body.longitude)
+                .then((store: IStore) => {
+                    response.json(store);
+                })
+                .catch((error: Error) => {
+                    response.status(error.statusCode).json(error.payload);
+                });
+        }
+        else {
+            let error = new BadRequestError(result.errors);
+            response.status(error.statusCode).json(error.payload);
+        }        
     }
 
     /**
@@ -105,9 +122,9 @@ class StoreController {
      */
     static findByID(request: Request, response: Response) {
         StoreService.findByID(request.params.id)
-            .then((city: IStore) => {
-                if (city) {
-                    response.json(city);
+            .then((store: IStore) => {
+                if (store) {
+                    response.json(store);
                 }
                 else {
                     let error: Error = new NotFoundError(Messages.STORE_NOT_FOUND);
@@ -128,8 +145,8 @@ class StoreController {
      */
     static update(request: Request, response: Response) {
         StoreService.update(request.params.id, request.body)
-            .then((city: IStore) => {
-                response.json(city);
+            .then((store: IStore) => {
+                response.json(store);
             })
             .catch((error: Error) => {
                 response.status(error.statusCode).json(error.payload);

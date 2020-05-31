@@ -68,25 +68,6 @@ class StoreService {
         return new Promise((resolve, reject) => {
             async.waterfall([
                 (done: Function) => {
-                    const Schema = new evalidate.schema({
-                        name: evalidate.string().required(Messages.STORE_NAME_REQUIRED),
-                        email: evalidate.string().email().required(Messages.STORE_EMAIL_REQUIRED),
-                        phone_number: evalidate.string().required(Messages.STORE_PHONE_NUMBER_REQUIRED),
-                        city: evalidate.string().required(Messages.STORE_CITY_REQUIRED),
-                        address: evalidate.string().required(Messages.STORE_ADDRESS_REQUIRED),
-                        latitude: evalidate.number().required(Messages.STORE_LOCATION_REQUIRED),
-                        longitude: evalidate.number().required(Messages.STORE_LOCATION_REQUIRED),
-                    });
-
-                    const result = Schema.validate({ name: name, email: email, phone_number: phone_number, city: city, address: address, latitude: latitude, longitude: longitude });
-                    if (result.isValid) {
-                        done(null);
-                    }
-                    else {
-                        done(new BadRequestError(result.errors));
-                    }
-                },
-                (done: Function) => {
                     CityService.findByID(city)
                         .then((city: ICity) => {
                             if (!city) {
