@@ -18,6 +18,44 @@ import { IPaginationResponse, PaginationAdapter } from '../utilities/adapters/Pa
 class ProductService {
 
     /**
+     * Filter Categories
+     * 
+     * @param {any}     query
+     * @param {number}  page
+     * @param {number}  limit
+     * 
+     * @returns {Promise<IPaginationResponse[]>}
+     */
+    private static filter(query: any, page: number = 1, limit: number = 25): Promise<IPaginationResponse> {
+        return new Promise((resolve, reject) => {
+            async.waterfall([
+                (done: Function) => {
+                    ProductDAL.count(query)
+                        .then((count) => {
+                            done(null, count);
+                        })
+                        .catch((error) => {
+                            done(new InternalServerError(error));
+                        });
+                },
+                (count: number, done: Function) => {
+                    ProductDAL.findMany(query, page, limit)
+                        .then((products: IProduct[]) => {
+                            resolve(PaginationAdapter(products, page, limit, count));
+                        })
+                        .catch((error) => {
+                            done(new InternalServerError(error));
+                        });
+                }
+            ], (error: any) => {
+                if (error) {
+                    reject(error);
+                }
+            });
+        });
+    }
+
+    /**
      * Create Product
      * 
      * @param {string}  name 
@@ -39,26 +77,6 @@ class ProductService {
     static create(name: string, price: number, quantity: number, description: string, image_urls: ImagePath[], category: string, store: string, tags: string[], weight: number, width: number, length: number, height: number, is_visible: boolean = true): Promise<IProduct> {
         return new Promise((resolve, reject) => {
             async.waterfall([
-                (done: Function) => {
-                    const Schema = new evalidate.schema({
-                        name: evalidate.string().required(Messages.PRODUCT_NAME_REQUIRED),
-                        price: evalidate.string().numeric().required(Messages.PRODUCT_PRICE_REQUIRED),
-                        quantity: evalidate.string().numeric().required(Messages.PRODUCT_QUANTITY_REQUIRED),
-                        category: evalidate.string().required(Messages.PRODUCT_CATEOGRY_REQUIRED),
-                        store: evalidate.string().required(Messages.PRODUCT_STORE_REQUIRED),
-                        weight: evalidate.string().numeric().required(Messages.PRODUCT_WEIGHT_REQUIRED),
-                        width: evalidate.string().numeric().required(Messages.PRODUCT_WIDTH_REQUIRED),
-                        length: evalidate.string().numeric().required(Messages.PRODUCT_LENGTH_REQUIRED),
-                        height: evalidate.string().numeric().required(Messages.PRODUCT_HEIGHT_REQUIRED),
-                    });
-                    const result = Schema.validate({ name: name, price: price, quantity: quantity, category: category, store: store, weight: weight, width: width, length: length, height: height });
-                    if (result.isValid) {
-                        done(null);
-                    }
-                    else {
-                        done(new BadRequestError(result.errors));
-                    }
-                },
                 (done: Function) => {
                     CategoryService.findByID(category)
                         .then((category: ICategory) => {
@@ -108,21 +126,84 @@ class ProductService {
     /**
      * Find All Product
      * 
+     * @param {string} term
      * @param {number} page
      * @param {number} limit
      * 
      * @returns {Promise<IPaginationResponse[]>}
      */
-    static findAll(page: number = 1, limit: number = 25): Promise<IPaginationResponse> {
+    static findAll(term: string = "", page: number = 1, limit: number = 25): Promise<IPaginationResponse> {
         return new Promise((resolve, reject) => {
-            ProductDAL.findMany({ deleted_at: null }, page, limit)
-                .then((products: IProduct[]) => {
-                    resolve(PaginationAdapter(products, page, limit));
+            let query: any;
+            if (term) {
+                query = { $or: [ { name: { $regex: new RegExp(term, "i") } }, { description: { $regex: new RegExp(term, "i") } } ], deleted_at: null }
+            }
+            else {
+                query = { deleted_at: null }
+            }
+
+            ProductService.filter(query, page, limit)
+                .then((result: IPaginationResponse) => {
+                    resolve(result);
                 })
                 .catch((error) => {
                     reject(new InternalServerError(error));
                 });
 
+        });
+    }
+
+    /**
+     * Find Products By Store
+     * 
+     * @param {string} store
+     * @param {number} page
+     * @param {number} limit
+     * 
+     * @returns {Promise<IPaginationResponse[]>}
+     */
+    static findByStore(store: string, page: number = 1, limit: number = 25): Promise<IPaginationResponse> {
+        return new Promise((resolve, reject) => {
+            if (mongoose.isValidObjectId(store)) {
+                let query: any = { store: store, deleted_at: null }
+                ProductService.filter(query, page, limit)
+                    .then((result: IPaginationResponse) => {
+                        resolve(result);
+                    })
+                    .catch((error) => {
+                        reject(error);
+                    });
+            }
+            else {
+                resolve(PaginationAdapter([], page, limit, 0));
+            }
+        });
+    }
+
+    /**
+     * Find Products By Category
+     * 
+     * @param {string} category
+     * @param {number} page
+     * @param {number} limit
+     * 
+     * @returns {Promise<IPaginationResponse[]>}
+     */
+    static findByCategory(category: string, page: number = 1, limit: number = 25): Promise<IPaginationResponse> {
+        return new Promise((resolve, reject) => {
+            if (mongoose.isValidObjectId(category)) {
+                let query: any = { category: category, deleted_at: null }
+                ProductService.filter(query, page, limit)
+                    .then((result: IPaginationResponse) => {
+                        resolve(result);
+                    })
+                    .catch((error) => {
+                        reject(error);
+                    });
+            }
+            else {
+                resolve(PaginationAdapter([], page, limit, 0));
+            }
         });
     }
 

@@ -13,6 +13,7 @@ import { IOrderPrice } from "../src/models/Price";
 import Order, { IOrderItem } from "../src/models/Order";
 import PaymentMethod from "../src/models/PaymentMethod";
 import ShipmentMethod from "../src/models/ShipmentMethod";
+import { ImagePath } from "../src/utilities/image/ImagePathResolver";
 
 
 export const createCategory = (name: string, slug: string, parent: string, image_url: string, description: string) => {
@@ -115,7 +116,7 @@ export const createShipmentMethod = (name: string) => {
     return shipmentMethod;
 };
 
-export const createProduct = (name: string, slug: string, price: number, quantity: number, description: string, image_urls: string[], category: string, store: string, tags: string[], weight: number, width: number, length: number, height: number, is_visible: boolean, is_out_of_stock: boolean) => {
+export const createProduct = (name: string, slug: string, price: number, quantity: number, description: string, image_urls: ImagePath[], category: string, store: string, tags: string[], weight: number, width: number, length: number, height: number, is_visible: boolean, is_out_of_stock: boolean) => {
     let product = new Product();
     product.name = name;
     product.slug = slug;
