@@ -9,7 +9,7 @@ import { BadRequestError } from '../../errors/Errors';
  */
 let storage = multer.diskStorage({
     destination: (request, file, callback) => {
-        callback(null, "uploads");
+        callback(null, "uploads/images");
     },
     filename: (request, file, callback) => {
         callback(null, getFilename(file));
