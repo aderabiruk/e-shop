@@ -39,8 +39,6 @@ class CityController {
             let error = new BadRequestError(result.errors);
             response.status(error.statusCode).json(error.payload);
         }
-
-        
     }
 
     /**
