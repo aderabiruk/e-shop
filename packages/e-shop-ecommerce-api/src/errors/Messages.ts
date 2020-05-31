@@ -46,6 +46,11 @@ const Messages = {
     DISCOUNT_INVALID_PERCENTAGE: "Invalid percentage provided!",
 
     /**
+     * Image Error Messages
+     */
+    IMAGE_INVALID_TYPE: "Only .png, .jpg and .jpeg format allowed!",
+
+    /**
      * Order Error Messages
      */
     ORDER_NOT_FOUND: "Order not found!",
