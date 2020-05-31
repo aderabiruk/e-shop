@@ -10,6 +10,7 @@ import StoreService from './Store.service';
 import ProductDAL from '../dals/Product.dal';
 import { ICategory } from '../models/Category';
 import CategoryService from './Category.service';
+import { ImagePath } from '../utilities/image/ImagePathResolver';
 import { NotFoundError, BadRequestError, InternalServerError } from '../errors/Errors';
 import { IPaginationResponse, PaginationAdapter } from '../utilities/adapters/Pagination';
 
@@ -35,20 +36,20 @@ class ProductService {
      * 
      * @returns {Promise<IProduct>}
      */
-    static create(name: string, price: number, quantity: number, description: string, image_urls: string[], category: string, store: string, tags: string[], weight: number, width: number, length: number, height: number, is_visible: boolean = true): Promise<IProduct> {
+    static create(name: string, price: number, quantity: number, description: string, image_urls: ImagePath[], category: string, store: string, tags: string[], weight: number, width: number, length: number, height: number, is_visible: boolean = true): Promise<IProduct> {
         return new Promise((resolve, reject) => {
             async.waterfall([
                 (done: Function) => {
                     const Schema = new evalidate.schema({
                         name: evalidate.string().required(Messages.PRODUCT_NAME_REQUIRED),
-                        price: evalidate.number().required(Messages.PRODUCT_PRICE_REQUIRED),
-                        quantity: evalidate.number().required(Messages.PRODUCT_QUANTITY_REQUIRED),
+                        price: evalidate.string().numeric().required(Messages.PRODUCT_PRICE_REQUIRED),
+                        quantity: evalidate.string().numeric().required(Messages.PRODUCT_QUANTITY_REQUIRED),
                         category: evalidate.string().required(Messages.PRODUCT_CATEOGRY_REQUIRED),
                         store: evalidate.string().required(Messages.PRODUCT_STORE_REQUIRED),
-                        weight: evalidate.number().required(Messages.PRODUCT_WEIGHT_REQUIRED),
-                        width: evalidate.number().required(Messages.PRODUCT_WIDTH_REQUIRED),
-                        length: evalidate.number().required(Messages.PRODUCT_LENGTH_REQUIRED),
-                        height: evalidate.number().required(Messages.PRODUCT_HEIGHT_REQUIRED),
+                        weight: evalidate.string().numeric().required(Messages.PRODUCT_WEIGHT_REQUIRED),
+                        width: evalidate.string().numeric().required(Messages.PRODUCT_WIDTH_REQUIRED),
+                        length: evalidate.string().numeric().required(Messages.PRODUCT_LENGTH_REQUIRED),
+                        height: evalidate.string().numeric().required(Messages.PRODUCT_HEIGHT_REQUIRED),
                     });
                     const result = Schema.validate({ name: name, price: price, quantity: quantity, category: category, store: store, weight: weight, width: width, length: length, height: height });
                     if (result.isValid) {

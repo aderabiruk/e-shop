@@ -1,6 +1,7 @@
 import { model, Schema, Document } from 'mongoose';
 
 import { ITag } from './Tag';
+import { ImagePath } from '../utilities/image/ImagePathResolver';
 import { IProductDimension, ProductDimensionSchema } from './Metrics';
 
 export interface IProduct extends Document {
@@ -9,7 +10,7 @@ export interface IProduct extends Document {
     price: number;
     quantity: number;
     description: string;
-    image_urls: string[];
+    image_urls: ImagePath[];
     category: string;
     store: string;
     tags: ITag[] | string[];
@@ -43,7 +44,7 @@ let ProductSchema = new Schema({
 		type: String,
     },
     image_urls: {
-		type: [String],
+		type: Array,
 		required: true
     },
     category: {
@@ -56,8 +57,7 @@ let ProductSchema = new Schema({
     },
     tags: [{
         type: Schema.Types.ObjectId,
-        ref: 'Tag',
-        required: true,
+        ref: 'Tag'
     }],
     weight: {
         type: Number,

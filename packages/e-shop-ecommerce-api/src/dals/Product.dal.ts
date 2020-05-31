@@ -1,6 +1,7 @@
 import transform_mongoose_error from 'mongoose-validation-error-handler';
 
 import Product, { IProduct } from '../models/Product';
+import { ImagePath } from '../utilities/image/ImagePathResolver';
 
 class ProductDAL {
 
@@ -25,7 +26,7 @@ class ProductDAL {
      * 
      * @returns {Promise<IProduct>}
      */
-    static create(name: string, slug: string, price: number, quantity: number, description: string, image_urls: string[], category: string, store: string, tags: string[], weight: number, width: number, length: number, height: number, is_visible: boolean, is_out_of_stock: boolean): Promise<IProduct> {
+    static create(name: string, slug: string, price: number, quantity: number, description: string, image_urls: ImagePath[], category: string, store: string, tags: string[], weight: number, width: number, length: number, height: number, is_visible: boolean, is_out_of_stock: boolean): Promise<IProduct> {
         return new Promise((resolve, reject) => {
             let product = new Product();
             product.name = name;
@@ -36,7 +37,7 @@ class ProductDAL {
             product.image_urls = image_urls;
             product.category = category;
             product.store = store;
-            product.tags = tags;
+            product.tags = tags ? tags : [];
             product.weight = weight ? weight : 0;
             product.dimension = {
                 width: width ? width : 0,
