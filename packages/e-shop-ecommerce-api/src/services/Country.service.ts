@@ -1,6 +1,5 @@
 import async from "async";
 import mongoose from 'mongoose';
-import evalidate from "evalidate";
 
 import Messages from '../errors/Messages';
 import CountryDAL from "../dals/Country.dal";
@@ -63,22 +62,6 @@ class CountryService {
         return new Promise((resolve, reject) => {
             async.waterfall([
                 (done: Function) => {
-                    const Schema = new evalidate.schema({
-                        name: evalidate.string().required(Messages.COUNTRY_NAME_REQUIRED),
-                        code: evalidate.string().required(Messages.COUNTRY_CODE_REQUIRED),
-                        flag: evalidate.string().required(Messages.COUNTRY_FLAG_REQUIRED),
-                        currency_name: evalidate.string().required(Messages.COUNTRY_CURRENCY_NAME_REQUIRED),
-                        currency_code: evalidate.string().required(Messages.COUNTRY_CURRENCY_CODE_REQUIRED)
-                    });
-                    const result = Schema.validate({ name: name, code: code, flag: flag, currency_name: currency_name, currency_code: currency_code });
-                    if (result.isValid) {
-                        done(null);
-                    }
-                    else {
-                        done(new BadRequestError(result.errors));
-                    }
-                },
-                (done: Function) => {
                     CountryDAL.create(name, code, flag, currency_name, currency_code)
                         .then((country: ICountry) => {
                             resolve(country);
@@ -98,6 +81,7 @@ class CountryService {
     /**
      * Find All Countries
      * 
+     * @param {string} term
      * @param {number} page
      * @param {number} limit
      * 

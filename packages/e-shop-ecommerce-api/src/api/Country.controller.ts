@@ -1,3 +1,5 @@
+import async from "async";
+import evalidate from "evalidate";
 import validator from 'validator';
 import { Request, Response } from 'express';
 
@@ -5,7 +7,7 @@ import Messages from '../errors/Messages';
 import { ICountry } from '../models/Country';
 import CountryService from "../services/Country.service";
 import { IPaginationResponse } from '../utilities/adapters/Pagination';
-import { Error, NotFoundError, NotImplementedError } from '../errors/Errors';
+import { Error, NotFoundError, NotImplementedError, BadRequestError } from '../errors/Errors';
 
 class CountryController {
     
@@ -16,13 +18,27 @@ class CountryController {
      * @param {Response} response 
      */
     static create(request: Request, response: Response) {
-        CountryService.create(request.body.name, request.body.code, request.body.flag, request.body.currency_name, request.body.currency_code)
-            .then((country: ICountry) => {
-                response.json(country);
-            })
-            .catch((error: Error) => {
-                response.status(error.statusCode).json(error.payload);
-            });
+        const Schema = new evalidate.schema({
+            name: evalidate.string().required(Messages.COUNTRY_NAME_REQUIRED),
+            code: evalidate.string().required(Messages.COUNTRY_CODE_REQUIRED),
+            flag: evalidate.string().required(Messages.COUNTRY_FLAG_REQUIRED),
+            currency_name: evalidate.string().required(Messages.COUNTRY_CURRENCY_NAME_REQUIRED),
+            currency_code: evalidate.string().required(Messages.COUNTRY_CURRENCY_CODE_REQUIRED)
+        });
+        const result = Schema.validate(request.body);
+        if (result.isValid) {
+            CountryService.create(request.body.name, request.body.code, request.body.flag, request.body.currency_name, request.body.currency_code)
+                .then((country: ICountry) => {
+                    response.json(country);
+                })
+                .catch((error: Error) => {
+                    response.status(error.statusCode).json(error.payload);
+                });
+        }
+        else {
+            let error = new BadRequestError(result.errors);
+            response.status(error.statusCode).json(error.payload);
+        }
     }
 
     /**

@@ -20,32 +20,27 @@ describe("Country.service", () => {
                 expect(error.statusCode).toBe(400);
                 expect(error.payload.errors).toEqual(expect.arrayContaining([
                     expect.objectContaining({
-                        field: "name",
-                        message: Messages.COUNTRY_NAME_REQUIRED
+                        field: "name"
                     })
                 ]));
                 expect(error.payload.errors).toEqual(expect.arrayContaining([
                     expect.objectContaining({
-                        field: "code",
-                        message: Messages.COUNTRY_CODE_REQUIRED
+                        field: "code"
                     })
                 ]));
                 expect(error.payload.errors).toEqual(expect.arrayContaining([
                     expect.objectContaining({
-                        field: "flag",
-                        message: Messages.COUNTRY_FLAG_REQUIRED
+                        field: "flag"
                     })
                 ]));
                 expect(error.payload.errors).toEqual(expect.arrayContaining([
                     expect.objectContaining({
-                        field: "currency_name",
-                        message: Messages.COUNTRY_CURRENCY_NAME_REQUIRED
+                        field: "currency_name"
                     })
                 ]));
                 expect(error.payload.errors).toEqual(expect.arrayContaining([
                     expect.objectContaining({
-                        field: "currency_code",
-                        message: Messages.COUNTRY_CURRENCY_CODE_REQUIRED
+                        field: "currency_code"
                     })
                 ]));
             }
