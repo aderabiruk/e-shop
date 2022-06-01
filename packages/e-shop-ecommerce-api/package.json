@@ -38,7 +38,7 @@
     "mongoose-validation-error-handler": "^2.1.5",
     "morgan": "^1.10.0",
     "multer": "^1.4.2",
-    "sharp": "^0.25.3",
+    "sharp": "^0.30.5",
     "typescript": "^3.8.3",
     "validator": "^13.0.0",
     "voca": "^1.4.0",
